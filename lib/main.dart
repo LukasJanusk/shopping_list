@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/modules/home/home_screen.dart';
 import 'package:shopping_list/modules/shopping-list/models/storage_manager.dart';
 import 'modules/shopping-list/shopping_list_screen.dart';
 import 'modules/shopping-list/shopping_list_info_screen.dart';
@@ -17,8 +18,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const ShoppingListScreen(),
-        '/info': (context) => const ShoppingListInfoScreen(),
+        '/': (context) => const HomeScreen(),
+        '/create-list': (context) => const ShoppingListScreen(),
+        '/shopping-list-info': (context) => const ShoppingListInfoScreen(),
+        '/shopping': (context) => const ShoppingListScreen(),
       },
     );
   }

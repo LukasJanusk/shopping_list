@@ -14,7 +14,7 @@ class ShoppingListScreen extends StatefulWidget {
 class _ShoppingListScreenState extends State<ShoppingListScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  static const String _title = 'Shopping List';
+  static const String _title = 'Shopping Lists';
   final ShoppingListManager shoppingListManager = ShoppingListManager();
 
   @override
@@ -40,6 +40,23 @@ class _ShoppingListScreenState extends State<ShoppingListScreen>
     setState(() {});
   }
 
+  Future<void> _reloadLists() async {
+    await shoppingListManager.loadShoppingLists();
+
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  Future<void> _openShoppingList(ShoppingListModel list) async {
+    await Navigator.pushNamed(
+      context,
+      '/shopping-list-info',
+      arguments: list,
+    );
+
+    await _reloadLists();
+  }
+
   void showNewListBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -57,7 +74,10 @@ class _ShoppingListScreenState extends State<ShoppingListScreen>
         itemCount: shoppingLists.length,
         itemBuilder: (context, index) {
           final list = shoppingLists[index];
-          return ShoppingListItemWidget(list: list);
+          return ShoppingListItemWidget(
+            list: list,
+            onTap: () => _openShoppingList(list),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

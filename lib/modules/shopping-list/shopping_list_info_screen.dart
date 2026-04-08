@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/components/buttons/confirm_button.dart';
 import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_bottom_sheet.dart';
+import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_editible.dart';
 import 'package:shopping_list/modules/shopping-list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping-list/models/shopping_list_model.dart';
 import 'package:shopping_list/modules/shopping-list/models/storage_manager.dart';
@@ -40,10 +42,18 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     super.dispose();
   }
 
-  void _toggleItemChecked(ShoppingListItemModel item) {
+  void _increaseItemQuantity(ShoppingListItemModel item) {
     setState(() {
-      item.toggleChecked();
+      item.quantity++;
     });
+  }
+
+  void _decreaseItemQuantity(ShoppingListItemModel item) {
+    if (item.quantity > 1) {
+      setState(() {
+        item.quantity--;
+      });
+    }
   }
 
   void _deleteItem(ShoppingListItemModel item) {
@@ -92,6 +102,14 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     StorageManager.saveShoppingList(_list!);
   }
 
+  Future<void> _onListDelete() async {
+    if (!mounted || _list == null) return;
+    await StorageManager.removeShoppingList(_list!);
+
+    if (!mounted) return;
+    Navigator.pop(context, true);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Ensure list is initialized
@@ -104,43 +122,61 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               final item = list.items[index];
-              return ListTile(
-                title: Row(
-                  children: [
-                    TextButton(
-                      onPressed: () => _toggleItemChecked(item),
-                      child: Text(
-                        item.name,
-                        style: TextStyle(
-                          fontSize: 20,
-                          decoration: item.isChecked
-                              ? TextDecoration.lineThrough
-                              : null,
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    Text('Quantity: ${item.quantity}'),
-                    IconButton(
-                      onPressed: () => _deleteItem(item),
-                      icon: const Icon(Icons.delete),
-                      color: Colors.red[700],
-                    ),
-                  ],
-                ),
+              return ShoppingListItemEditible(
+                item: item,
+                onDelete: () => _deleteItem(item),
+                increaseQuantity: () => _increaseItemQuantity(item),
+                decreaseQuantity: () => _decreaseItemQuantity(item),
               );
             }, childCount: list.items.length),
           ),
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: SafeArea(
-                child: ElevatedButton(
-                  onPressed: _onListSave,
-                  child: Text(
-                    'Save',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SafeArea(
+                  child: Row(
+                    spacing: 16,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ConfirmButton(
+                        onConfirmed: _onListDelete,
+                        initialWidget: Text(
+                          'Delete list',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.red[700],
+                          ),
+                        ),
+                        initialColor: Colors.red[100]!,
+                        confirmColor: Colors.red[500]!,
+                        confirmWidget: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Confirm Delete',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _onListSave,
+                        child: Text(
+                          'Save',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
