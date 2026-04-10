@@ -173,8 +173,6 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
                       'Delete list',
                       style: TextStyle(fontSize: 18, color: Colors.red[700]),
                     ),
-                    initialColor: Colors.red[100]!,
-                    confirmColor: Colors.red[500]!,
                     confirmWidget: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -223,8 +221,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
                                 color: Colors.red[700],
                               ),
                             ),
-                            initialColor: Colors.red[100]!,
-                            confirmColor: Colors.red[500]!,
+
                             confirmWidget: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
