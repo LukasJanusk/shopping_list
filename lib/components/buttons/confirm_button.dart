@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 
+enum ConfirmButtonVariant { success, error, alert }
+
 class ConfirmButton extends StatefulWidget {
   final VoidCallback onConfirmed;
   final Widget initialWidget;
   final Widget confirmWidget;
-  final Color initialColor;
-  final Color confirmColor;
+  final ConfirmButtonVariant variant;
 
   const ConfirmButton({
     super.key,
     required this.onConfirmed,
     this.initialWidget = const Text('Delete'),
     this.confirmWidget = const Text('Confirm'),
-    this.initialColor = Colors.redAccent,
-    this.confirmColor = Colors.red,
+    this.variant = ConfirmButtonVariant.error,
   });
+
+  Null get variantColors => null;
+  Null get accentColors => null;
 
   @override
   State<ConfirmButton> createState() => _ConfirmButtonState();
@@ -22,6 +25,16 @@ class ConfirmButton extends StatefulWidget {
 
 class _ConfirmButtonState extends State<ConfirmButton> {
   bool _confirming = false;
+  final variantColors = {
+    ConfirmButtonVariant.success: Colors.green,
+    ConfirmButtonVariant.error: Colors.red,
+    ConfirmButtonVariant.alert: Colors.orange,
+  };
+  final accentColors = {
+    ConfirmButtonVariant.success: Colors.green[200]!,
+    ConfirmButtonVariant.error: Colors.red[200]!,
+    ConfirmButtonVariant.alert: Colors.orange[200]!,
+  };
 
   void _handleTap() {
     if (_confirming) {
@@ -37,8 +50,8 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: _confirming
-            ? widget.confirmColor
-            : widget.initialColor,
+            ? variantColors[widget.variant]
+            : accentColors[widget.variant],
       ),
       onPressed: _handleTap,
       child: AnimatedSwitcher(

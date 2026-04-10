@@ -59,7 +59,7 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextButton(
                 onPressed: _openItemNameEditSheet,
                 child: Text(
@@ -90,10 +90,24 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
               icon: const Icon(Icons.add),
               color: Colors.grey[600],
             ),
-            IconButton(
-              onPressed: widget.onDelete,
-              icon: const Icon(Icons.delete),
-              color: Colors.red[700],
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red.withAlpha(80),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: IconButton(
+                    onPressed: widget.onDelete,
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red[800],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
