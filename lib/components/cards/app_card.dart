@@ -4,7 +4,8 @@ class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
     required this.child,
-    this.size = 120,
+    this.width = 120,
+    this.height = 120,
     this.onTap,
     this.color,
     this.elevation = 2,
@@ -15,7 +16,8 @@ class AppCard extends StatelessWidget {
   });
 
   final Widget child;
-  final double size;
+  final double width;
+  final double height;
   final VoidCallback? onTap;
   final Color? color;
   final double elevation;
@@ -29,8 +31,8 @@ class AppCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       margin: margin,
-      width: size,
-      height: size,
+      width: width,
+      height: height,
       child: Material(
         color: color ?? theme.colorScheme.surface,
         elevation: elevation,

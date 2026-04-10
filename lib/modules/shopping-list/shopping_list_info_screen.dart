@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/buttons/confirm_button.dart';
+import 'package:shopping_list/components/modals/bottomTitleEditModal.dart';
 import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_editible.dart';
 import 'package:shopping_list/modules/shopping-list/models/shopping_list_item_model.dart';
@@ -111,79 +112,151 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     Navigator.pop(context, true);
   }
 
+  void _updateListTitle(String newTitle) {
+    setState(() {
+      if (_list != null) _list!.name = newTitle;
+    });
+  }
+
+  void _onListTitleTap() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomTitleEditModal(
+          title: 'Edit List Title',
+          onTitleUpdate: _updateListTitle,
+          label: 'List Title',
+          hintText: 'Enter list title',
+          modalTitle: 'Edit List Title',
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Ensure list is initialized
     final list = _list ?? ShoppingListModel(name: 'New List');
 
     return Scaffold(
-      appBar: AppBar(title: Text(list.name)),
-      body: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final item = list.items[index];
-              return ShoppingListItemEditible(
-                item: item,
-                onDelete: () => _deleteItem(item),
-                increaseQuantity: () => _increaseItemQuantity(item),
-                decreaseQuantity: () => _decreaseItemQuantity(item),
-              );
-            }, childCount: list.items.length),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  child: Row(
-                    spacing: 16,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ConfirmButton(
-                        onConfirmed: _onListDelete,
-                        initialWidget: Text(
-                          'Delete list',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.red[700],
-                          ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(list.name),
+            SizedBox(width: 8),
+            IconButton(icon: Icon(Icons.edit), onPressed: _onListTitleTap),
+          ],
+        ),
+      ),
+      body: Builder(
+        builder: (context) {
+          if (list.items.isEmpty) {
+            return Column(
+              children: [
+                Spacer(),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'No items yet. Tap the + button to add your first item!',
+                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                SafeArea(
+                  child: ConfirmButton(
+                    onConfirmed: _onListDelete,
+                    initialWidget: Text(
+                      'Delete list',
+                      style: TextStyle(fontSize: 18, color: Colors.red[700]),
+                    ),
+                    initialColor: Colors.red[100]!,
+                    confirmColor: Colors.red[500]!,
+                    confirmWidget: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Confirm Delete',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
-                        initialColor: Colors.red[100]!,
-                        confirmColor: Colors.red[500]!,
-                        confirmWidget: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Confirm Delete',
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final item = list.items[index];
+                  return ShoppingListItemEditible(
+                    item: item,
+                    onDelete: () => _deleteItem(item),
+                    increaseQuantity: () => _increaseItemQuantity(item),
+                    decreaseQuantity: () => _decreaseItemQuantity(item),
+                  );
+                }, childCount: list.items.length),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SafeArea(
+                      child: Row(
+                        spacing: 16,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ConfirmButton(
+                            onConfirmed: _onListDelete,
+                            initialWidget: Text(
+                              'Delete list',
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.red[700],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: _onListSave,
-                        child: Text(
-                          'Save',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            initialColor: Colors.red[100]!,
+                            confirmColor: Colors.red[500]!,
+                            confirmWidget: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Confirm Delete',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                          ElevatedButton(
+                            onPressed: _onListSave,
+                            child: Text(
+                              'Save',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: showAddItemModal,
