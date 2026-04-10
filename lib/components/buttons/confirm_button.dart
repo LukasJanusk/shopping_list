@@ -26,10 +26,10 @@ class _ConfirmButtonState extends State<ConfirmButton> {
   void _handleTap() {
     if (_confirming) {
       setState(() => _confirming = false);
+      widget.onConfirmed();
     } else {
       setState(() => _confirming = true);
     }
-    widget.onConfirmed();
   }
 
   @override

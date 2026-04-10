@@ -17,9 +17,12 @@ class ShoppingListItemWidget extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(list.name),
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisSize: MainAxisSize.min,
+            children: [Text(list.name)],
+          ),
           Spacer(),
-
           Text(
             '${list.items.length} items',
             style: TextStyle(color: Colors.grey),

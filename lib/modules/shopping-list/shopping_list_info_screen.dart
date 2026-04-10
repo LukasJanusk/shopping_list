@@ -44,7 +44,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
 
   void _increaseItemQuantity(ShoppingListItemModel item) {
     setState(() {
-      item.quantity++;
+      if (item.quantity < 99) item.quantity++;
     });
   }
 
@@ -100,6 +100,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   void _onListSave() {
     if (!mounted || _list == null) return;
     StorageManager.saveShoppingList(_list!);
+    Navigator.pop(context, true);
   }
 
   Future<void> _onListDelete() async {
