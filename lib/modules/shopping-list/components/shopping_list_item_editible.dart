@@ -26,17 +26,25 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
     return ListTile(
       title: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: Colors.indigo[200],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 4,
+              offset: const Offset(1, 2),
+            ),
+          ],
           borderRadius: BorderRadius.circular(24),
         ),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 widget.item.name,
                 style: const TextStyle(
                   fontSize: 16,
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -47,7 +55,13 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
               icon: const Icon(Icons.remove),
               color: Colors.grey[600],
             ),
-            Text('Quantity: ${widget.item.quantity}'),
+            SizedBox(
+              width: 24,
+              child: Text(
+                '${widget.item.quantity}',
+                textAlign: TextAlign.center,
+              ),
+            ),
             IconButton(
               onPressed: widget.increaseQuantity,
               icon: const Icon(Icons.add),

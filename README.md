@@ -1,3 +1,33 @@
-# shopping_list
+# 🛒 Shopping List App TODO
 
-A new Flutter project.
+## Core Features
+
+- [x] Create new shopping list
+- [x] Edit existing shopping list
+- [x] Delete shopping list
+- [x] Add items to shopping list
+- [x] Remove items from shopping list
+- [ ] Edit items on the list
+
+## Data & Storage
+
+- [x] Save shopping lists to storage on Save, Edit, Delete
+- [ ] Investigate more robust storage solutions
+
+## UI / UX
+
+- [ ] Select list for shopping screen
+- [ ] Shopping mode screen
+- [ ] Onboarding / first-time indicators
+- [ ] Select design for app
+
+## Design & Assets
+
+- [ ] Generate assets
+- [ ] Generate assets for production
+- [ ] Update widgets for selected design
+
+## Code Quality
+
+- [ ] Refactor codebase
+- [ ] Abstract widgets where possible
