@@ -33,7 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
           spacing: 16,
           children: [
             AppCard(
-              size: cardSize,
+              width: cardSize,
+              height: cardSize,
               color: Colors.blueAccent,
               onTap: () => Navigator.pushNamed(context, '/create-list'),
               child: const Text(
@@ -46,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             AppCard(
-              size: cardSize,
+              width: cardSize,
+              height: cardSize,
               color: Colors.indigo,
               onTap: () => Navigator.pushNamed(context, '/shopping'),
               child: const Text(

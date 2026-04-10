@@ -7,7 +7,8 @@
 - [x] Delete shopping list
 - [x] Add items to shopping list
 - [x] Remove items from shopping list
-- [ ] Edit items on the list
+- [x] Edit items on the shopping list
+- [ ] Lithuanian language support
 
 ## Data & Storage
 

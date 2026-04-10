@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/modules/shopping-list/models/shopping_list_item_model.dart';
+import 'package:shopping_list/components/modals/bottomTitleEditModal.dart';
 
 class ShoppingListItemEditible extends StatefulWidget {
   const ShoppingListItemEditible({
@@ -8,12 +9,14 @@ class ShoppingListItemEditible extends StatefulWidget {
     this.onDelete,
     this.increaseQuantity,
     this.decreaseQuantity,
+    this.changeName,
   });
 
   final ShoppingListItemModel item;
   final VoidCallback? onDelete;
   final VoidCallback? increaseQuantity;
   final VoidCallback? decreaseQuantity;
+  final VoidCallback? changeName;
 
   @override
   State<ShoppingListItemEditible> createState() =>
@@ -21,6 +24,23 @@ class ShoppingListItemEditible extends StatefulWidget {
 }
 
 class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
+  void _openItemNameEditSheet() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomTitleEditModal(
+          title: widget.item.name,
+          onTitleUpdate: (newName) {
+            setState(() => widget.item.name = newName);
+          },
+          label: 'Item Name',
+          hintText: 'Enter item name',
+          modalTitle: 'Edit Item Name',
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -40,12 +60,15 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(
-                widget.item.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w500,
+              child: TextButton(
+                onPressed: _openItemNameEditSheet,
+                child: Text(
+                  widget.item.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
