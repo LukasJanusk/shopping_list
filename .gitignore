@@ -44,4 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# VS Code Copilot custom agents
+.github/agents/*.agent.md
+
 .DS_Store

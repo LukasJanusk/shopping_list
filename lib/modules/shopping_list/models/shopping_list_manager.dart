@@ -1,4 +1,4 @@
-import 'package:shopping_list/modules/shopping-list/models/storage_manager.dart';
+import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
 import 'shopping_list_model.dart';
 
 class ShoppingListManager {

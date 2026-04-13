@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/buttons/confirm_button.dart';
-import 'package:shopping_list/components/modals/bottomTitleEditModal.dart';
-import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_bottom_sheet.dart';
-import 'package:shopping_list/modules/shopping-list/components/shopping_list_item_editible.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_item_model.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_model.dart';
-import 'package:shopping_list/modules/shopping-list/models/storage_manager.dart';
+import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
+import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_bottom_sheet.dart';
+import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_editible.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
+import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
 
 class ShoppingListInfoScreen extends StatefulWidget {
   const ShoppingListInfoScreen({super.key, this.list});
@@ -93,6 +93,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   void showAddItemModal() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) =>
           ShoppingListBottomSheet(onItemAdded: _addItemToList),
     );
@@ -121,6 +122,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   void _onListTitleTap() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return BottomTitleEditModal(
           title: 'Edit List Title',

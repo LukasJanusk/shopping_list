@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/modules/shopping-list/components/shopping_new_list_bottom_sheet.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_manager.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_model.dart';
+import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_new_list_bottom_sheet.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_manager.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 import 'components/shopping_list_item.dart';
 
 class ShoppingListScreen extends StatefulWidget {
@@ -48,11 +48,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen>
   }
 
   Future<void> _openShoppingList(ShoppingListModel list) async {
-    await Navigator.pushNamed(
-      context,
-      '/shopping-list-info',
-      arguments: list,
-    );
+    await Navigator.pushNamed(context, '/shopping-list-info', arguments: list);
 
     await _reloadLists();
   }
@@ -60,6 +56,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen>
   void showNewListBottomSheet() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) =>
           ShoppingNewListBottomSheet(onListCreated: _onListCreated),
     );

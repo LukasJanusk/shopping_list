@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_model.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 
 enum StorageKeys {
   shoppingList('shopping_lists');
@@ -81,6 +81,7 @@ class StorageManager {
           )
           .toList();
     } catch (e) {
+      // ignore: avoid_print
       print('Error decoding shopping list: $e');
       return [];
     }

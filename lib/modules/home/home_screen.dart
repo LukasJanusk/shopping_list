@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: cardSize,
               height: cardSize,
               color: Colors.indigo,
-              onTap: () => Navigator.pushNamed(context, '/shopping'),
+              onTap: () =>
+                  Navigator.pushNamed(context, '/select-shopping-list'),
               child: const Text(
                 'Go Shopping',
                 style: TextStyle(

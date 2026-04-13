@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/modules/home/home_screen.dart';
-import 'package:shopping_list/modules/shopping-list/models/storage_manager.dart';
-import 'modules/shopping-list/shopping_list_screen.dart';
-import 'modules/shopping-list/shopping_list_info_screen.dart';
+import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
+import 'package:shopping_list/modules/shopping_list/shopping/select_shopping_list_screen.dart';
+import 'package:shopping_list/modules/shopping_list/shopping/shopping_screen.dart';
+import 'modules/shopping_list/create_list/shopping_list_screen.dart';
+import 'modules/shopping_list/create_list/shopping_list_info_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +22,9 @@ class MainApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/create-list': (context) => const ShoppingListScreen(),
+        '/select-shopping-list': (context) => const SelectShoppingListScreen(),
         '/shopping-list-info': (context) => const ShoppingListInfoScreen(),
-        '/shopping': (context) => const ShoppingListScreen(),
+        '/shopping': (context) => const ShoppingScreen(),
       },
     );
   }

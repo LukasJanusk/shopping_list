@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/modules/shopping-list/models/shopping_list_item_model.dart';
-import 'package:shopping_list/components/modals/bottomTitleEditModal.dart';
+import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
+import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
 
 class ShoppingListItemEditible extends StatefulWidget {
   const ShoppingListItemEditible({
@@ -27,6 +27,7 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
   void _openItemNameEditSheet() async {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return BottomTitleEditModal(
           title: widget.item.name,
