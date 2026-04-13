@@ -32,3 +32,12 @@
 
 - [ ] Refactor codebase
 - [ ] Abstract widgets where possible
+
+## Extra Features
+
+- [ ] Shopping timer
+- [ ] Shopping history
+- [ ] Shopping item categories
+- [ ] Item pricing and total spendings
+- [ ] Shopping statistics screen
+- [ ] Settings Screen

@@ -12,13 +12,12 @@ class ShoppingScreen extends StatefulWidget {
 }
 
 class _ShoppingScreenState extends State<ShoppingScreen> {
-  static const _itemAnimationDuration = Duration(milliseconds: 280);
+  static const _rowAnimationDuration = Duration(milliseconds: 240);
   static const _sectionResizeDuration = Duration(milliseconds: 220);
   static const _estimatedItemExtent = 72.0;
   static const _sectionChromeExtent = 76.0;
   static const _minimumVisibleSectionHeight = _sectionChromeExtent;
-  static const _minimumSingleItemSectionHeight = 168.0;
-  static const _minimumCheckedSectionHeight =
+  static const _minimumSectionHeight =
       _sectionChromeExtent + (_estimatedItemExtent * 2);
 
   ShoppingListModel? _list;
@@ -26,25 +25,33 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   final _uncheckedListKey = GlobalKey<AnimatedListState>();
   final List<ShoppingListItemModel> _checkedItems = [];
   final List<ShoppingListItemModel> _uncheckedItems = [];
-  bool _didInitializeSections = false;
+  bool _didInitializePresentationLists = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _list ??= ModalRoute.of(context)?.settings.arguments as ShoppingListModel?;
 
-    if (!_didInitializeSections && _list != null) {
-      _checkedItems
-        ..clear()
-        ..addAll(_list!.items.where((item) => item.isChecked));
-      _uncheckedItems
-        ..clear()
-        ..addAll(_list!.items.where((item) => !item.isChecked));
-      _didInitializeSections = true;
+    if (!_didInitializePresentationLists && _list != null) {
+      _initializePresentationLists(_list!);
+      _didInitializePresentationLists = true;
     }
   }
 
+  void _initializePresentationLists(ShoppingListModel list) {
+    _checkedItems
+      ..clear()
+      ..addAll(list.items.where((item) => item.isChecked));
+    _uncheckedItems
+      ..clear()
+      ..addAll(list.items.where((item) => !item.isChecked));
+  }
+
   Future<void> _toggleItemChecked(ShoppingListItemModel item) async {
+    final list = _list;
+    if (list == null) return;
+
+    final sourceChecked = item.isChecked;
     final movesToChecked = !item.isChecked;
     final sourceItems = movesToChecked ? _uncheckedItems : _checkedItems;
     final targetItems = movesToChecked ? _checkedItems : _uncheckedItems;
@@ -58,42 +65,38 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
       sourceIndex,
       sourceItems.length,
     );
+    final movedItem = sourceItems.removeAt(sourceIndex);
 
-    final removedItem = sourceItems.removeAt(sourceIndex);
     sourceListKey.currentState?.removeItem(
       sourceAnimatedIndex,
       (context, animation) => _buildAnimatedItem(
-        item: removedItem,
+        item: movedItem,
         animation: animation,
-        slideFromTop: movesToChecked,
+        checked: sourceChecked,
       ),
-      duration: _itemAnimationDuration,
+      duration: _rowAnimationDuration,
     );
 
-    removedItem.toggleChecked();
+    movedItem.toggleChecked();
 
     final targetIndex = movesToChecked ? targetItems.length : 0;
-    targetItems.insert(targetIndex, removedItem);
+    targetItems.insert(targetIndex, movedItem);
     final targetAnimatedIndex = _animatedIndexForLogicalIndex(
       targetIndex,
       targetItems.length,
     );
+
     targetListKey.currentState?.insertItem(
       targetAnimatedIndex,
-      duration: _itemAnimationDuration,
+      duration: _rowAnimationDuration,
     );
 
-    final list = _list;
-    if (list != null) {
-      list.items
-        ..clear()
-        ..addAll(_checkedItems)
-        ..addAll(_uncheckedItems);
-    }
+    list.items
+      ..clear()
+      ..addAll(_checkedItems)
+      ..addAll(_uncheckedItems);
 
     setState(() {});
-
-    if (list == null) return;
 
     await StorageManager.saveShoppingList(list);
   }
@@ -117,7 +120,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   Widget _buildAnimatedItem({
     required ShoppingListItemModel item,
     required Animation<double> animation,
-    required bool slideFromTop,
+    required bool checked,
   }) {
     final curvedAnimation = CurvedAnimation(
       parent: animation,
@@ -128,14 +131,14 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
       opacity: curvedAnimation,
       child: SizeTransition(
         sizeFactor: curvedAnimation,
-        axisAlignment: slideFromTop ? -1 : 1,
+        axisAlignment: checked ? -1 : 1,
         child: SlideTransition(
           position: Tween<Offset>(
-            begin: Offset(0, slideFromTop ? -0.12 : 0.12),
+            begin: Offset(0, checked ? -0.08 : 0.08),
             end: Offset.zero,
           ).animate(curvedAnimation),
           child: Padding(
-            padding: EdgeInsets.only(bottom: slideFromTop ? 4 : 8),
+            padding: EdgeInsets.only(bottom: checked ? 4 : 8),
             child: _buildItemTile(item),
           ),
         ),
@@ -185,7 +188,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                         return _buildAnimatedItem(
                           item: item,
                           animation: animation,
-                          slideFromTop: checked,
+                          checked: checked,
                         );
                       },
                     ),
@@ -196,16 +199,12 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     );
   }
 
-  double _estimatedSectionHeight(int itemCount, {required bool checked}) {
+  double _estimatedSectionHeight(int itemCount) {
     var estimatedHeight =
         _sectionChromeExtent + (itemCount * _estimatedItemExtent);
 
-    if (itemCount == 1 && estimatedHeight < _minimumSingleItemSectionHeight) {
-      estimatedHeight = _minimumSingleItemSectionHeight;
-    }
-
-    if (checked && estimatedHeight < _minimumCheckedSectionHeight) {
-      estimatedHeight = _minimumCheckedSectionHeight;
+    if (estimatedHeight < _minimumSectionHeight) {
+      estimatedHeight = _minimumSectionHeight;
     }
 
     return estimatedHeight;
@@ -213,9 +212,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final list = _list;
-
-    if (list == null) {
+    if (_list == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Shopping')),
         body: const Center(child: Text('No shopping list selected.')),
@@ -223,42 +220,39 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(list.name)),
+      appBar: AppBar(title: Text(_list!.name)),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final maxHeight = constraints.maxHeight;
           final availableHeight = maxHeight;
+          final checkedItems = _checkedItems;
+          final uncheckedItems = _uncheckedItems;
 
           late double checkedSectionHeight;
           late double uncheckedSectionHeight;
 
-          if (_checkedItems.isEmpty) {
+          if (checkedItems.isEmpty) {
             checkedSectionHeight = 0;
             uncheckedSectionHeight = maxHeight;
-          } else if (_uncheckedItems.isEmpty) {
+          } else if (uncheckedItems.isEmpty) {
             checkedSectionHeight = maxHeight;
             uncheckedSectionHeight = 0;
           } else {
             final checkedDesiredHeight = _estimatedSectionHeight(
-              _checkedItems.length,
-              checked: true,
+              checkedItems.length,
             );
             final uncheckedDesiredHeight = _estimatedSectionHeight(
-              _uncheckedItems.length,
-              checked: false,
+              uncheckedItems.length,
             );
-            final maxUncheckedHeight =
-                (availableHeight - _minimumCheckedSectionHeight).clamp(
-                  _sectionChromeExtent,
-                  availableHeight,
-                );
+            final maxUncheckedHeight = (availableHeight - _minimumSectionHeight)
+                .clamp(_sectionChromeExtent, availableHeight);
 
             uncheckedSectionHeight = uncheckedDesiredHeight.clamp(
               _sectionChromeExtent,
               maxUncheckedHeight,
             );
             checkedSectionHeight = (availableHeight - uncheckedSectionHeight)
-                .clamp(_minimumCheckedSectionHeight, maxHeight);
+                .clamp(_minimumSectionHeight, maxHeight);
 
             if (checkedSectionHeight > checkedDesiredHeight &&
                 uncheckedDesiredHeight < uncheckedSectionHeight) {
@@ -282,7 +276,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                   child: showCheckedSection
                       ? _buildSection(
                           title: 'Checked',
-                          items: _checkedItems,
+                          items: checkedItems,
                           checked: true,
                         )
                       : null,
@@ -296,7 +290,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                   child: showUncheckedSection
                       ? _buildSection(
                           title: 'Unchecked',
-                          items: _uncheckedItems,
+                          items: uncheckedItems,
                           checked: false,
                         )
                       : null,
