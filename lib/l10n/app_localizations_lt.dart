@@ -16,7 +16,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get homeHeroDescription =>
-      'Sukurkite sąrašą, stebėkite kiekvieną prekę ir eikite į parduotuvę turėdami aiškų planą.';
+      'Sukurkite sąrašą, pridėkitę prekę ir eikite į parduotuvę turėdami aiškų planą.';
 
   @override
   String get createNewList => 'Sukurti naują sąrašą';

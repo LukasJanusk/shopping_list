@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 
 enum StorageKeys {
-  shoppingList('shopping_lists');
+  shoppingList('shopping_lists'),
+  preferredLocale('preferred_locale');
 
   final String key;
   const StorageKeys(this.key);
@@ -12,37 +14,30 @@ enum StorageKeys {
 class StorageManager {
   static late SharedPreferences _prefs;
 
-  // Initialize SharedPreferences
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  // Save a string value
   static Future<bool> saveString(String key, String value) {
     return _prefs.setString(key, value);
   }
 
-  // Get a string value
   static String? getString(String key) {
     return _prefs.getString(key);
   }
 
-  // Save a list of strings
   static Future<bool> saveStringList(String key, List<String> value) {
     return _prefs.setStringList(key, value);
   }
 
-  // Get a list of strings
   static List<String> getStringList(String key) {
     return _prefs.getStringList(key) ?? [];
   }
 
-  // Remove a key
   static Future<bool> remove(String key) {
     return _prefs.remove(key);
   }
 
-  // Clear all storage
   static Future<bool> clear() {
     return _prefs.clear();
   }
@@ -80,9 +75,7 @@ class StorageManager {
             (item) => ShoppingListModel.fromJson(item as Map<String, dynamic>),
           )
           .toList();
-    } catch (e) {
-      // ignore: avoid_print
-      print('Error decoding shopping list: $e');
+    } catch (_) {
       return [];
     }
   }

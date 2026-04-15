@@ -3,11 +3,11 @@ import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
 import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/ui/divider_with_title.dart';
+import 'package:shopping_list/core/storage_manager.dart';
 import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/components/shopping_list_check_item.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
-import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
 
 class ShoppingScreen extends StatefulWidget {
   const ShoppingScreen({super.key});
