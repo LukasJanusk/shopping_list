@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 import 'package:shopping_list/theme/app_decorations.dart';
 import 'package:shopping_list/theme/color_theme.dart';
@@ -21,6 +22,7 @@ class ShoppingListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final accentColor = switch (variant) {
       ShoppingListCardVariant.primary => AppColors.coral,
@@ -104,7 +106,7 @@ class ShoppingListCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
-                              '${list.items.length} ${list.items.length == 1 ? 'item' : 'items'}',
+                              l10n.itemCount(list.items.length),
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: subtitleColor,
                                 fontWeight: FontWeight.w600,

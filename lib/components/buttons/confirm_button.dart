@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/app_decorations.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -6,15 +7,15 @@ enum ConfirmButtonVariant { success, error, alert }
 
 class ConfirmButton extends StatefulWidget {
   final VoidCallback onConfirmed;
-  final Widget initialWidget;
-  final Widget confirmWidget;
+  final Widget? initialWidget;
+  final Widget? confirmWidget;
   final ConfirmButtonVariant variant;
 
   const ConfirmButton({
     super.key,
     required this.onConfirmed,
-    this.initialWidget = const Text('Delete'),
-    this.confirmWidget = const Text('Confirm'),
+    this.initialWidget,
+    this.confirmWidget,
     this.variant = ConfirmButtonVariant.error,
   });
 
@@ -58,6 +59,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final variantColor = _variantColor(widget.variant);
     final variantAccent = _variantAccent(widget.variant);
 
@@ -92,7 +94,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
         },
         child: KeyedSubtree(
           key: ValueKey(_confirming),
-          child: _confirming ? widget.confirmWidget : widget.initialWidget,
+          child: _confirming
+              ? (widget.confirmWidget ?? Text(l10n.confirmDelete))
+              : (widget.initialWidget ?? Text(l10n.delete)),
         ),
       ),
     );

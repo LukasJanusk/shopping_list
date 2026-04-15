@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -8,8 +9,10 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return AppScaffold(
-      appBar: const AppTopBar(title: Text('Shopping History')),
+      appBar: AppTopBar(title: Text(l10n.shoppingHistory)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -23,7 +26,7 @@ class HistoryScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Shopping history will appear here.',
+                l10n.shoppingHistoryPlaceholder,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,

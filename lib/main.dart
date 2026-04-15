@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shopping_list/l10n/app_localizations.dart';
 import 'package:shopping_list/modules/home/home_screen.dart';
 import 'package:shopping_list/modules/history/history_screen.dart';
+import 'package:shopping_list/modules/settings/settings_screen.dart';
 import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/select_shopping_list_screen.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/shopping_screen.dart';
@@ -24,6 +27,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
+      locale: const Locale('lt'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       initialRoute: '/splash',
       routes: {
         '/': (context) => const HomeScreen(),
@@ -34,6 +46,7 @@ class MainApp extends StatelessWidget {
         '/shopping': (context) => const ShoppingScreen(),
         '/history': (context) => const HistoryScreen(),
         '/statistics': (context) => const StatisticsScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }

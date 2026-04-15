@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/components/shopping_list_card.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_manager.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
@@ -19,13 +20,12 @@ class SelectShoppingListScreen extends StatefulWidget {
 class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  final String title = 'Select Shopping List';
   final ShoppingListManager shoppingListManager = ShoppingListManager();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    shoppingListManager.loadShoppingLists();
+    reloadLists();
   }
 
   @override
@@ -38,11 +38,6 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
   void dispose() {
     controller.dispose();
     super.dispose();
-  }
-
-  void onListCreated(ShoppingListModel list) {
-    shoppingListManager.addShoppingList(list);
-    setState(() {});
   }
 
   Future<void> reloadLists() async {
@@ -64,15 +59,18 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
       '/create-list',
       arguments: {'showCreateListBottomSheet': true},
     );
+
+    await reloadLists();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final shoppingLists = shoppingListManager.shoppingLists
         .where((list) => !list.completed)
         .toList();
     return AppScaffold(
-      appBar: AppTopBar(title: Text(title)),
+      appBar: AppTopBar(title: Text(l10n.selectShoppingList)),
       body: Builder(
         builder: (context) {
           if (shoppingLists.isEmpty) {
@@ -86,7 +84,7 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
                     SvgPicture.asset(AppAssets.emptyLists, height: 200),
                     const SizedBox(height: 24),
                     Text(
-                      'No shopping lists yet',
+                      l10n.noShoppingListsYet,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
@@ -96,7 +94,7 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Start with a fresh list and keep everything you need in one place.',
+                      l10n.emptyListsDescription,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppColors.inkSoft,
@@ -107,7 +105,7 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
                     ElevatedButton.icon(
                       onPressed: navigateToCreateList,
                       icon: const Icon(Icons.playlist_add_rounded),
-                      label: const Text('Create Your First List'),
+                      label: Text(l10n.createYourFirstList),
                     ),
                   ],
                 ),

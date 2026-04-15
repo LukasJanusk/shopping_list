@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/ui/background_circle.dart';
 import 'package:shopping_list/components/ui/bouble_float_animation.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/app_assets.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -70,6 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return AppScaffold(
@@ -158,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Welcome',
+                      l10n.welcome,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: AppColors.ink,
                         fontSize: 40,
@@ -166,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'to Shopping List',
+                      l10n.splashSubtitle,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.inkSoft,
                         fontSize: 18,
@@ -209,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen>
                         : const Offset(0, 0.25),
                     curve: Curves.easeOutCubic,
                     child: Text(
-                      'Tap to start',
+                      l10n.tapToStart,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.inkSoft,
                         fontWeight: FontWeight.w600,

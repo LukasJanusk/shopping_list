@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
 class ShoppingListBottomSheet extends StatefulWidget {
@@ -54,10 +55,15 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
+    final modalButtonTextStyle = theme.textTheme.titleMedium?.copyWith(
+      fontSize: 17,
+      fontWeight: FontWeight.w700,
+    );
 
     return AppBottomSheet(
-      title: 'Add item to list',
+      title: l10n.addItemToList,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Form(
         key: _formKey,
@@ -67,13 +73,13 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
           children: [
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Item Name',
-                hintText: 'Enter item name',
+              decoration: InputDecoration(
+                labelText: l10n.itemName,
+                hintText: l10n.enterItemName,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter an item name';
+                  return l10n.pleaseEnterItemName;
                 }
                 return null;
               },
@@ -97,7 +103,7 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Quantity',
+                          l10n.quantity,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: AppColors.ink,
                             fontWeight: FontWeight.w700,
@@ -148,6 +154,7 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
                 onPressed: _isLoading ? null : _addItem,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: modalButtonTextStyle,
                 ),
                 child: _isLoading
                     ? const SizedBox(
@@ -160,7 +167,7 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
                           ),
                         ),
                       )
-                    : const Text('Add Item'),
+                    : Text(l10n.addItem),
               ),
             ),
           ],

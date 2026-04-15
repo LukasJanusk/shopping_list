@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/app_decorations.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -10,7 +11,7 @@ Future<T?> showAppPopupDialog<T>({
   required String message,
   required String confirmLabel,
   required VoidCallback onConfirm,
-  String cancelLabel = 'Cancel',
+  String? cancelLabel,
   AppPopupDialogVariant variant = AppPopupDialogVariant.neutral,
   IconData? icon,
 }) {
@@ -38,7 +39,7 @@ class AppPopupDialog extends StatelessWidget {
     required this.title,
     required this.message,
     required this.confirmLabel,
-    required this.cancelLabel,
+    this.cancelLabel,
     required this.onConfirm,
     required this.onCancel,
     this.variant = AppPopupDialogVariant.neutral,
@@ -48,7 +49,7 @@ class AppPopupDialog extends StatelessWidget {
   final String title;
   final String message;
   final String confirmLabel;
-  final String cancelLabel;
+  final String? cancelLabel;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
   final AppPopupDialogVariant variant;
@@ -68,6 +69,11 @@ class AppPopupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final modalButtonTextStyle = theme.textTheme.titleMedium?.copyWith(
+      fontSize: 17,
+      fontWeight: FontWeight.w700,
+    );
 
     return AlertDialog(
       backgroundColor: AppColors.surface,
@@ -102,12 +108,15 @@ class AppPopupDialog extends StatelessWidget {
           ),
         ],
       ),
-      content: Text(
-        message,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: AppColors.inkSoft,
-          fontSize: 15,
-          height: 1.4,
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(
+          message,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: AppColors.inkSoft,
+            fontSize: 15,
+            height: 1.4,
+          ),
         ),
       ),
       actions: [
@@ -117,11 +126,12 @@ class AppPopupDialog extends StatelessWidget {
             foregroundColor: AppColors.ink,
             side: BorderSide(color: AppColors.inkSoft.withAlpha(48)),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            textStyle: modalButtonTextStyle,
             shape: RoundedRectangleBorder(
               borderRadius: AppDecorations.buttonRadius,
             ),
           ),
-          child: Text(cancelLabel),
+          child: Text(cancelLabel ?? l10n.cancel),
         ),
         ElevatedButton(
           onPressed: onConfirm,
@@ -129,6 +139,7 @@ class AppPopupDialog extends StatelessWidget {
             backgroundColor: _accentColor,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            textStyle: modalButtonTextStyle,
           ),
           child: Text(confirmLabel),
         ),

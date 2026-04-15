@@ -7,6 +7,7 @@ import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
 import 'package:shopping_list/components/ui/empty_state.dart';
 import 'package:shopping_list/components/ui/floating_pointer_with_text.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_editible.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
@@ -43,7 +44,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     _list ??=
         widget.list ??
         (ModalRoute.of(context)?.settings.arguments as ShoppingListModel?) ??
-        ShoppingListModel(name: 'New List');
+        ShoppingListModel(name: context.l10n.newListDefaultName);
   }
 
   @override
@@ -67,12 +68,13 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   void _deleteItem(ShoppingListItemModel item) {
+    final l10n = context.l10n;
+
     showAppPopupDialog<void>(
       context: context,
-      title: 'Delete item?',
-      message:
-          'Remove "${item.name}" from this shopping list? This action cannot be undone.',
-      confirmLabel: 'Delete',
+      title: l10n.deleteItemTitle,
+      message: l10n.deleteItemMessage(item.name),
+      confirmLabel: l10n.delete,
       variant: AppPopupDialogVariant.danger,
       icon: Icons.delete_outline_rounded,
       onConfirm: () {
@@ -121,33 +123,37 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   void _onListTitleTap() {
+    final l10n = context.l10n;
+
     showAppBottomSheet(
       context: context,
       builder: (context) {
         return BottomTitleEditModal(
-          title: 'Edit List Title',
+          title: _list?.name ?? l10n.newListDefaultName,
           onTitleUpdate: _updateListTitle,
-          label: 'List Title',
-          hintText: 'Enter list title',
-          modalTitle: 'Edit List Title',
+          label: l10n.listTitle,
+          hintText: l10n.enterListTitle,
+          modalTitle: l10n.editListTitle,
         );
       },
     );
   }
 
   Widget _buildDeleteButton() {
+    final l10n = context.l10n;
+
     return ConfirmButton(
       onConfirmed: _onListDelete,
       initialWidget: Text(
-        'Delete list',
+        l10n.deleteList,
         style: TextStyle(fontSize: 18, color: Colors.red[700]),
       ),
-      confirmWidget: const Row(
+      confirmWidget: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Confirm Delete',
-            style: TextStyle(fontSize: 18, color: Colors.white),
+            l10n.confirmDelete,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
           ),
         ],
       ),
@@ -155,6 +161,8 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   Widget _buildSaveButton() {
+    final l10n = context.l10n;
+
     return ElevatedButton(
       onPressed: _onListSave,
       style: AppDecorations.actionButtonStyle(
@@ -163,8 +171,8 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
         borderColor: AppColors.ink.withAlpha(48),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       ),
-      child: const Text(
-        'Save',
+      child: Text(
+        l10n.save,
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
       ),
     );
@@ -189,8 +197,9 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     // Ensure list is initialized
-    final list = _list ?? ShoppingListModel(name: 'New List');
+    final list = _list ?? ShoppingListModel(name: l10n.newListDefaultName);
 
     return AppScaffold(
       appBar: AppTopBar(
@@ -214,14 +223,12 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
                 Spacer(),
                 EmptyState(
                   asset: AppAssets.emptyLists,
-                  title: 'Your list is empty',
+                  title: l10n.yourListIsEmpty,
                 ),
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(right: 56.0),
-                  child: FloatingTextWithPointer(
-                    text: 'Tap + to add items to your list!',
-                  ),
+                  child: FloatingTextWithPointer(text: l10n.tapAddItemsToList),
                 ),
                 _buildBottomActions(showSave: false),
               ],

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
 import 'package:shopping_list/components/ui/floating_pointer_with_text.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_new_list_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping_list/components/shopping_list_card.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_manager.dart';
@@ -21,7 +24,6 @@ class ShoppingListScreen extends StatefulWidget {
 }
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
-  static const String _title = 'Shopping Lists';
   final ShoppingListManager shoppingListManager = ShoppingListManager();
   bool _didScheduleCreateListBottomSheet = false;
 
@@ -35,7 +37,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     super.didChangeDependencies();
     shoppingListManager.loadShoppingLists();
 
-    if (_didScheduleCreateListBottomSheet || !_shouldShowCreateListBottomSheet(context)) {
+    if (_didScheduleCreateListBottomSheet ||
+        !_shouldShowCreateListBottomSheet(context)) {
       return;
     }
 
@@ -77,19 +80,29 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     await _reloadLists();
   }
 
-  void showNewListBottomSheet() {
-    showAppBottomSheet(
+  Future<void> showNewListBottomSheet() async {
+    final newList = await showAppBottomSheet<ShoppingListModel>(
       context: context,
-      builder: (context) =>
-          ShoppingNewListBottomSheet(onListCreated: _onListCreated),
+      builder: (context) => const ShoppingNewListBottomSheet(),
     );
+
+    if (!mounted || newList == null) return;
+
+    _onListCreated(newList);
+    await Navigator.pushNamed(
+      context,
+      '/shopping-list-info',
+      arguments: newList,
+    );
+    await _reloadLists();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final shoppingLists = shoppingListManager.shoppingLists;
     return AppScaffold(
-      appBar: const AppTopBar(title: Text(_title)),
+      appBar: AppTopBar(title: Text(l10n.shoppingLists)),
       body: Builder(
         builder: (context) {
           if (shoppingLists.isEmpty) {
@@ -105,7 +118,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         SvgPicture.asset(AppAssets.emptyLists, height: 200),
                         const SizedBox(height: 24),
                         Text(
-                          'No shopping lists yet',
+                          l10n.noShoppingListsYet,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(
@@ -116,7 +129,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         const SizedBox(height: 10),
 
                         Text(
-                          'Start with a fresh list and keep everything you need in one place.',
+                          l10n.emptyListsDescription,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(color: AppColors.inkSoft, height: 1.4),
@@ -125,9 +138,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                     ),
                   ),
                 ),
-                FloatingTextWithPointer(
-                  text: 'Tap + to create your first list!',
-                ),
+                FloatingTextWithPointer(text: l10n.tapCreateFirstList),
               ],
             );
           }

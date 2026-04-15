@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/app_decorations.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -28,6 +29,8 @@ class ShoppingListItemEditible extends StatefulWidget {
 
 class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
   void _openItemNameEditSheet() async {
+    final l10n = context.l10n;
+
     showAppBottomSheet(
       context: context,
       builder: (context) {
@@ -36,9 +39,9 @@ class _ShoppingListItemEditibleState extends State<ShoppingListItemEditible> {
           onTitleUpdate: (newName) {
             setState(() => widget.item.name = newName);
           },
-          label: 'Item Name',
-          hintText: 'Enter item name',
-          modalTitle: 'Edit Item Name',
+          label: l10n.itemName,
+          hintText: l10n.enterItemName,
+          modalTitle: l10n.editItemName,
         );
       },
     );

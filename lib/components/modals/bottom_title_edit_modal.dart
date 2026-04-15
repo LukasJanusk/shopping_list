@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
 class BottomTitleEditModal extends StatefulWidget {
@@ -7,18 +8,18 @@ class BottomTitleEditModal extends StatefulWidget {
     super.key,
     required this.title,
     required this.onTitleUpdate,
-    this.label = 'Update List',
-    this.hintText = 'Enter list title',
-    this.modalTitle = 'Update List Title',
-    this.buttonText = 'Update',
+    this.label,
+    this.hintText,
+    this.modalTitle,
+    this.buttonText,
   });
 
   final String title;
   final void Function(String) onTitleUpdate;
-  final String label;
-  final String hintText;
-  final String modalTitle;
-  final String buttonText;
+  final String? label;
+  final String? hintText;
+  final String? modalTitle;
+  final String? buttonText;
   @override
   State<BottomTitleEditModal> createState() => _BottomTitleEditModalState();
 }
@@ -56,8 +57,12 @@ class _BottomTitleEditModalState extends State<BottomTitleEditModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final modalButtonTextStyle = Theme.of(context).textTheme.titleMedium
+        ?.copyWith(fontSize: 17, fontWeight: FontWeight.w700);
+
     return AppBottomSheet(
-      title: widget.modalTitle,
+      title: widget.modalTitle ?? l10n.updateListTitle,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Form(
         key: _formKey,
@@ -68,12 +73,12 @@ class _BottomTitleEditModalState extends State<BottomTitleEditModal> {
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
-                labelText: widget.label,
-                hintText: widget.hintText,
+                labelText: widget.label ?? l10n.updateList,
+                hintText: widget.hintText ?? l10n.enterListTitle,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Field cannot be empty';
+                  return l10n.fieldCannotBeEmpty;
                 }
                 return null;
               },
@@ -87,6 +92,7 @@ class _BottomTitleEditModalState extends State<BottomTitleEditModal> {
                 onPressed: _isLoading ? null : _updateList,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: modalButtonTextStyle,
                 ),
                 child: _isLoading
                     ? const SizedBox(
@@ -99,7 +105,7 @@ class _BottomTitleEditModalState extends State<BottomTitleEditModal> {
                           ),
                         ),
                       )
-                    : Text(widget.buttonText),
+                    : Text(widget.buttonText ?? l10n.update),
               ),
             ),
           ],

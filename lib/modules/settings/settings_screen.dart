@@ -4,15 +4,15 @@ import 'package:shopping_list/components/layout/app_top_bar.dart';
 import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
-class StatisticsScreen extends StatelessWidget {
-  const StatisticsScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return AppScaffold(
-      appBar: AppTopBar(title: Text(l10n.statistics)),
+      appBar: AppTopBar(title: Text(l10n.settings)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -20,13 +20,13 @@ class StatisticsScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.insert_chart_rounded,
+                Icons.settings_rounded,
                 size: 56,
                 color: AppColors.inkSoft,
               ),
               const SizedBox(height: 16),
               Text(
-                l10n.statisticsPlaceholder,
+                l10n.settingsPlaceholder,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,

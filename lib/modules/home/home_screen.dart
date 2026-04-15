@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_list/components/cards/app_card.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/theme/app_assets.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return AppScaffold(
@@ -28,7 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SvgPicture.asset(AppAssets.appMark, width: 30, height: 30),
             const SizedBox(width: 12),
-            const Text('Shopping List'),
+            Text(l10n.appName),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.settings_rounded, color: AppColors.ink),
+              onPressed: () => Navigator.pushNamed(context, '/settings'),
+            ),
           ],
         ),
       ),
@@ -66,9 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return painter.height;
             }
 
-            const title = 'Plan faster. Shop calmer.';
-            const description =
-                'Create a list, keep track of every item, and head to the store with a clear plan.';
+            final title = l10n.homeHeroTitle;
+            final description = l10n.homeHeroDescription;
 
             final titleHeight = measureTextHeight(title, titleStyle);
             final bodyHeight = measureTextHeight(description, bodyStyle);
@@ -132,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => Navigator.pushNamed(context, '/create-list'),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.playlist_add_rounded,
                           size: 36,
@@ -140,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Create New List',
+                          l10n.createNewList,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -160,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.pushNamed(context, '/select-shopping-list'),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.shopping_bag_rounded,
                           size: 36,
@@ -168,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Go Shopping',
+                          l10n.goShopping,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -190,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () => Navigator.pushNamed(context, '/history'),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.history_rounded,
                                 size: 28,
@@ -198,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                'History',
+                                l10n.history,
                                 style: TextStyle(
                                   color: AppColors.ink,
                                   fontSize: 16,
@@ -220,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.pushNamed(context, '/statistics'),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.insert_chart_rounded,
                                 size: 28,
@@ -228,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                'Statistics',
+                                l10n.statistics,
                                 style: TextStyle(
                                   color: AppColors.ink,
                                   fontSize: 16,

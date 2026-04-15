@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
 class ShoppingNewListBottomSheet extends StatefulWidget {
-  const ShoppingNewListBottomSheet({super.key, required this.onListCreated});
-
-  final void Function(ShoppingListModel list) onListCreated;
+  const ShoppingNewListBottomSheet({super.key});
 
   @override
   State<ShoppingNewListBottomSheet> createState() =>
@@ -32,20 +31,21 @@ class _ShoppingNewListBottomSheetState
       final listName = _nameController.text.trim();
       final newList = ShoppingListModel(name: listName);
 
-      widget.onListCreated(newList);
-
       if (mounted) {
         setState(() => _isLoading = false);
-        Navigator.pop(context);
-        Navigator.pushNamed(context, '/shopping-list-info', arguments: newList);
+        Navigator.pop(context, newList);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final modalButtonTextStyle = Theme.of(context).textTheme.titleMedium
+        ?.copyWith(fontSize: 17, fontWeight: FontWeight.w700);
+
     return AppBottomSheet(
-      title: 'Create New List',
+      title: l10n.createListTitle,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Form(
         key: _formKey,
@@ -55,13 +55,13 @@ class _ShoppingNewListBottomSheetState
           children: [
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'List Name',
-                hintText: 'Enter list name',
+              decoration: InputDecoration(
+                labelText: l10n.listName,
+                hintText: l10n.enterListName,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a list name';
+                  return l10n.pleaseEnterListName;
                 }
                 return null;
               },
@@ -75,6 +75,7 @@ class _ShoppingNewListBottomSheetState
                 onPressed: _isLoading ? null : _createList,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: modalButtonTextStyle,
                 ),
                 child: _isLoading
                     ? const SizedBox(
@@ -87,7 +88,7 @@ class _ShoppingNewListBottomSheetState
                           ),
                         ),
                       )
-                    : const Text('Create List'),
+                    : Text(l10n.createList),
               ),
             ),
           ],

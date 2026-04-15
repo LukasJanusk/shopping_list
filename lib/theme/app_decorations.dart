@@ -49,12 +49,14 @@ class AppDecorations {
     ),
     double elevation = 0,
     Color shadowColor = Colors.transparent,
+    TextStyle? textStyle,
   }) {
     return ElevatedButton.styleFrom(
       elevation: elevation,
       shadowColor: shadowColor,
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
+      textStyle: textStyle,
       side: borderColor == null ? null : BorderSide(color: borderColor),
       padding: padding,
       shape: RoundedRectangleBorder(

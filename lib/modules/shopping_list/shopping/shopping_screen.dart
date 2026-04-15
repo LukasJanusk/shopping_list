@@ -3,6 +3,7 @@ import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
 import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/ui/divider_with_title.dart';
+import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/components/shopping_list_check_item.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
@@ -181,6 +182,8 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     required List<ShoppingListItemModel> items,
     required bool checked,
   }) {
+    final l10n = context.l10n;
+
     return Padding(
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
@@ -198,8 +201,8 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                         Center(
                           child: Text(
                             checked
-                                ? 'No checked items yet.'
-                                : 'No unchecked items.',
+                                ? l10n.noCheckedItemsYet
+                                : l10n.noUncheckedItems,
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                         ),
@@ -241,12 +244,13 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   }
 
   void showFinishShoppingModal() async {
+    final l10n = context.l10n;
+
     await showAppPopupDialog<void>(
       context: context,
-      title: 'Finish shopping?',
-      message:
-          'Mark this shopping trip as completed? You can still review it later in history.',
-      confirmLabel: 'Finish',
+      title: l10n.finishShoppingTitle,
+      message: l10n.finishShoppingMessage,
+      confirmLabel: l10n.finish,
       variant: AppPopupDialogVariant.success,
       icon: Icons.check_circle_outline_rounded,
       onConfirm: finishShopping,
@@ -264,10 +268,12 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     if (_list == null) {
       return AppScaffold(
-        appBar: const AppTopBar(title: Text('Shopping')),
-        body: const Center(child: Text('No shopping list selected.')),
+        appBar: AppTopBar(title: Text(l10n.shopping)),
+        body: Center(child: Text(l10n.noShoppingListSelected)),
       );
     }
 
@@ -327,7 +333,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                   height: checkedSectionHeight,
                   child: showCheckedSection
                       ? _buildSection(
-                          title: 'Checked',
+                          title: l10n.checked,
                           items: checkedItems,
                           checked: true,
                         )
@@ -341,7 +347,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                   height: uncheckedSectionHeight,
                   child: showUncheckedSection
                       ? _buildSection(
-                          title: 'Unchecked',
+                          title: l10n.unchecked,
                           items: uncheckedItems,
                           checked: false,
                         )
