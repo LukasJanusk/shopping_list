@@ -8,7 +8,7 @@
 - [x] Add items to shopping list
 - [x] Remove items from shopping list
 - [x] Edit items on the shopping list
-- [ ] Lithuanian language support
+- [x] Lithuanian language support
 
 ## Data & Storage
 
@@ -21,6 +21,7 @@
 - [x] Shopping mode screen
 - [ ] Onboarding / first-time indicators
 - [x] Select design for app
+- [ ] Deside on App rotation contraints
 
 ## Design & Assets
 
@@ -41,4 +42,4 @@
 - [ ] Item pricing and total spendings
 - [ ] Shopping statistics screen
 - [ ] Settings Screen
-- [ ] Splash Screen
+- [x] Splash Screen

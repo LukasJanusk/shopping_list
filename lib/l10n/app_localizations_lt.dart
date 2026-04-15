@@ -193,6 +193,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get cancel => 'Atšaukti';
 
   @override
+  String get languageEnglish => 'Anglų';
+
+  @override
+  String get languageLithuanian => 'Lietuvių';
+
+  @override
   String itemCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -204,4 +210,7 @@ class AppLocalizationsLt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get language => 'Kalba';
 }

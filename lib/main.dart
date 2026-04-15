@@ -73,7 +73,7 @@ class _MainAppState extends State<MainApp> {
         '/shopping': (context) => const ShoppingScreen(),
         '/history': (context) => const HistoryScreen(),
         '/statistics': (context) => const StatisticsScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        '/settings': (context) => SettingsScreen(settings: widget.settings),
       },
     );
   }

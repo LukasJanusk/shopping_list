@@ -64,6 +64,8 @@
   "settingsPlaceholder": "Nustatymai bus rodomi čia.",
   "statisticsPlaceholder": "Statistika bus rodoma čia.",
   "cancel": "Atšaukti",
+  "languageEnglish": "Anglų",
+  "languageLithuanian": "Lietuvių",
   "itemCount": "{count, plural, =0{Nėra prekių} one{{count} prekė} few{{count} prekės} other{{count} prekių}}",
   "@itemCount": {
     "placeholders": {
@@ -71,5 +73,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "language": "Kalba"
 }
