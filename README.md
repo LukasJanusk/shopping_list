@@ -41,3 +41,4 @@
 - [ ] Item pricing and total spendings
 - [ ] Shopping statistics screen
 - [ ] Settings Screen
+- [ ] Splash Screen

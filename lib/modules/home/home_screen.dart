@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppScaffold(
       showShapes: false,
       appBar: AppTopBar(
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             SvgPicture.asset(AppAssets.appMark, width: 30, height: 30),

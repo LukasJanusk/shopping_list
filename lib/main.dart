@@ -4,6 +4,7 @@ import 'package:shopping_list/modules/history/history_screen.dart';
 import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/select_shopping_list_screen.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/shopping_screen.dart';
+import 'package:shopping_list/modules/splash_screen/splash_screen.dart';
 import 'package:shopping_list/modules/statistics/statistics_screen.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 import 'modules/shopping_list/create_list/shopping_list_screen.dart';
@@ -23,9 +24,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
         '/': (context) => const HomeScreen(),
+        '/splash': (context) => const SplashScreen(),
         '/create-list': (context) => const ShoppingListScreen(),
         '/select-shopping-list': (context) => const SelectShoppingListScreen(),
         '/shopping-list-info': (context) => const ShoppingListInfoScreen(),
