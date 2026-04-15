@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
+import 'package:shopping_list/theme/color_theme.dart';
 
 class ShoppingNewListBottomSheet extends StatefulWidget {
   const ShoppingNewListBottomSheet({super.key, required this.onListCreated});
@@ -42,85 +44,53 @@ class _ShoppingNewListBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
-
-    return SafeArea(
-      top: false,
-      child: AnimatedPadding(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        padding: EdgeInsets.only(bottom: keyboardInset),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Create New List',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'List Name',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter list name',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a list name';
-                      }
-                      return null;
-                    },
-                    textInputAction: TextInputAction.done,
-                    autofocus: true,
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _createList,
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 12),
+    return AppBottomSheet(
+      title: 'Create New List',
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'List Name',
+                hintText: 'Enter list name',
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter a list name';
+                }
+                return null;
+              },
+              textInputAction: TextInputAction.done,
+              autofocus: true,
+            ),
+            const SizedBox(height: 22),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _createList,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.surface,
                           ),
-                          child: _isLoading
-                              ? SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : Text('Create List'),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      )
+                    : const Text('Create List'),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

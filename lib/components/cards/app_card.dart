@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/theme/app_decorations.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -13,6 +14,7 @@ class AppCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(12),
     this.margin = EdgeInsets.zero,
     this.backgroundColor,
+    this.splashColor,
   });
 
   final Widget child;
@@ -25,6 +27,7 @@ class AppCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
   final Color? backgroundColor;
+  final Color? splashColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +36,24 @@ class AppCard extends StatelessWidget {
       margin: margin,
       width: width,
       height: height,
-      child: Material(
-        color: color ?? theme.colorScheme.surface,
-        elevation: elevation,
-        borderRadius: borderRadius,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          hoverColor: backgroundColor ?? theme.scaffoldBackgroundColor,
-          onTap: onTap,
-          child: Padding(
-            padding: padding,
-            child: Center(child: child),
+      child: DecoratedBox(
+        decoration: AppDecorations.elevatedCard(
+          color: color ?? theme.colorScheme.surface,
+          borderRadius: borderRadius,
+          depth: elevation,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: borderRadius,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            hoverColor: backgroundColor ?? theme.scaffoldBackgroundColor,
+            splashColor: splashColor ?? theme.colorScheme.primary.withAlpha(50),
+            onTap: onTap,
+            child: Padding(
+              padding: padding,
+              child: Center(child: child),
+            ),
           ),
         ),
       ),

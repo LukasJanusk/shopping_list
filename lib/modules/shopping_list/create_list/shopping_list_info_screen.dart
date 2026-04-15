@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/components/buttons/confirm_button.dart';
+import 'package:shopping_list/components/layout/app_scaffold.dart';
+import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
+import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
+import 'package:shopping_list/components/ui/empty_state.dart';
+import 'package:shopping_list/components/ui/floating_pointer_with_text.dart';
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_bottom_sheet.dart';
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_editible.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
+import 'package:shopping_list/theme/app_assets.dart';
+import 'package:shopping_list/theme/app_decorations.dart';
+import 'package:shopping_list/theme/color_theme.dart';
 
 class ShoppingListInfoScreen extends StatefulWidget {
   const ShoppingListInfoScreen({super.key, this.list});
@@ -58,24 +67,17 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   void _deleteItem(ShoppingListItemModel item) {
-    showDialog(
+    showAppPopupDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Item?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() => _list?.removeItem(item));
-              Navigator.pop(context);
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+      title: 'Delete item?',
+      message:
+          'Remove "${item.name}" from this shopping list? This action cannot be undone.',
+      confirmLabel: 'Delete',
+      variant: AppPopupDialogVariant.danger,
+      icon: Icons.delete_outline_rounded,
+      onConfirm: () {
+        setState(() => _list?.removeItem(item));
+      },
     );
   }
 
@@ -91,9 +93,8 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   void showAddItemModal() {
-    showModalBottomSheet(
+    showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
       builder: (context) =>
           ShoppingListBottomSheet(onItemAdded: _addItemToList),
     );
@@ -120,9 +121,8 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   }
 
   void _onListTitleTap() {
-    showModalBottomSheet(
+    showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
       builder: (context) {
         return BottomTitleEditModal(
           title: 'Edit List Title',
@@ -135,13 +135,66 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     );
   }
 
+  Widget _buildDeleteButton() {
+    return ConfirmButton(
+      onConfirmed: _onListDelete,
+      initialWidget: Text(
+        'Delete list',
+        style: TextStyle(fontSize: 18, color: Colors.red[700]),
+      ),
+      confirmWidget: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Confirm Delete',
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSaveButton() {
+    return ElevatedButton(
+      onPressed: _onListSave,
+      style: AppDecorations.actionButtonStyle(
+        backgroundColor: AppColors.ink.withAlpha(18),
+        foregroundColor: AppColors.ink,
+        borderColor: AppColors.ink.withAlpha(48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      ),
+      child: const Text(
+        'Save',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+
+  Widget _buildBottomActions({required bool showSave}) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: SafeArea(
+          child: Row(
+            spacing: 16,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [_buildDeleteButton(), if (showSave) _buildSaveButton()],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Ensure list is initialized
     final list = _list ?? ShoppingListModel(name: 'New List');
 
-    return Scaffold(
-      appBar: AppBar(
+    return AppScaffold(
+      appBar: AppTopBar(
+        centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -155,37 +208,22 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
         builder: (context) {
           if (list.items.isEmpty) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Spacer(),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'No items yet. Tap the + button to add your first item!',
-                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                EmptyState(
+                  asset: AppAssets.emptyLists,
+                  title: 'Your list is empty',
                 ),
                 Spacer(),
-                SafeArea(
-                  child: ConfirmButton(
-                    onConfirmed: _onListDelete,
-                    initialWidget: Text(
-                      'Delete list',
-                      style: TextStyle(fontSize: 18, color: Colors.red[700]),
-                    ),
-                    confirmWidget: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Confirm Delete',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 56.0),
+                  child: FloatingTextWithPointer(
+                    text: 'Tap + to add items to your list!',
                   ),
                 ),
+                _buildBottomActions(showSave: false),
               ],
             );
           }
@@ -204,54 +242,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
               ),
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SafeArea(
-                      child: Row(
-                        spacing: 16,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ConfirmButton(
-                            onConfirmed: _onListDelete,
-                            initialWidget: Text(
-                              'Delete list',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.red[700],
-                              ),
-                            ),
-
-                            confirmWidget: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Confirm Delete',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: _onListSave,
-                            child: Text(
-                              'Save',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: _buildBottomActions(showSave: true),
               ),
             ],
           );

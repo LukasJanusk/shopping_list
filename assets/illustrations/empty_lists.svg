@@ -1,0 +1,40 @@
+<svg width="720" height="520" viewBox="0 0 720 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="520" rx="36" fill="#FFF7EC"/>
+  <circle cx="551" cy="117" r="61" fill="#2A9D8F" fill-opacity="0.14"/>
+  <circle cx="166" cy="416" r="73" fill="#F4A261" fill-opacity="0.18"/>
+  <rect x="159" y="94" width="240" height="300" rx="30" fill="#FFFFFF" stroke="#163138" stroke-width="14"/>
+  <path d="M198 113C198 92.0132 215.013 75 236 75H321C341.987 75 359 92.0132 359 113V116H198V113Z" fill="#163138"/>
+  <path d="M221 75C221 59.536 233.536 47 249 47C264.464 47 277 59.536 277 75" stroke="#163138" stroke-width="14" stroke-linecap="round"/>
+  <rect x="197" y="162" width="161" height="18" rx="9" fill="#D9E3E4"/>
+  <rect x="197" y="208" width="128" height="18" rx="9" fill="#D9E3E4"/>
+  <rect x="197" y="254" width="149" height="18" rx="9" fill="#D9E3E4"/>
+  <rect x="197" y="300" width="118" height="18" rx="9" fill="#D9E3E4"/>
+  <circle cx="340" cy="216" r="19" fill="#E76F51"/>
+  <path d="M331 216L338 223L350 210" stroke="#FFF7EC" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="364" cy="262" r="19" fill="#2A9D8F" fill-opacity="0.35"/>
+  <g filter="url(#bagShadow)">
+    <path d="M445 188C445 176.954 453.954 168 465 168H571.797C579.516 168 586.514 172.428 589.776 179.424L624.794 254.544C630.92 267.69 621.317 282.818 606.814 282.818H481C461.118 282.818 445 266.7 445 246.818V188Z" fill="#163138"/>
+  </g>
+  <path d="M473 193H538.058C546.616 193 554.209 198.482 556.917 206.6L575.782 263.145C578.942 272.619 571.891 282.364 561.904 282.364H488C479.163 282.364 472 275.201 472 266.364V194C472 193.448 472.448 193 473 193Z" fill="#FFF7EC"/>
+  <path d="M509 183C509 169.193 520.193 158 534 158H551C564.807 158 576 169.193 576 183V190H509V183Z" fill="#F4A261"/>
+  <path d="M490 217H565" stroke="#2A9D8F" stroke-width="12" stroke-linecap="round"/>
+  <path d="M505 242H554" stroke="#D9E3E4" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="492" cy="298" r="25" fill="#E76F51"/>
+  <circle cx="576" cy="298" r="25" fill="#E76F51"/>
+  <circle cx="492" cy="298" r="11" fill="#FFF7EC"/>
+  <circle cx="576" cy="298" r="11" fill="#FFF7EC"/>
+  <path d="M465 372C495.125 352.261 534.272 355.202 561 379" stroke="#163138" stroke-width="14" stroke-linecap="round"/>
+  <path d="M447 385C453.627 385 459 379.627 459 373C459 366.373 453.627 361 447 361C440.373 361 435 366.373 435 373C435 379.627 440.373 385 447 385Z" fill="#2A9D8F"/>
+  <path d="M579 396C586.18 396 592 390.18 592 383C592 375.82 586.18 370 579 370C571.82 370 566 375.82 566 383C566 390.18 571.82 396 579 396Z" fill="#F4A261"/>
+  <defs>
+    <filter id="bagShadow" x="419" y="152" width="235.395" height="166.818" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="6" dy="10"/>
+      <feGaussianBlur stdDeviation="16"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0862745 0 0 0 0 0.192157 0 0 0 0 0.219608 0 0 0 0.12 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+  </defs>
+</svg>

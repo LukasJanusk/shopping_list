@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'shopping_list_item_model.dart';
 
 class ShoppingListModel {
@@ -8,9 +7,10 @@ class ShoppingListModel {
   List<ShoppingListItemModel> items;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
+  bool completed = false;
 
   ShoppingListModel({required this.name, List<ShoppingListItemModel>? items})
-      : items = items ?? [];
+    : items = items ?? [];
 
   void addItem(ShoppingListItemModel item) {
     items.add(item);
@@ -27,6 +27,11 @@ class ShoppingListModel {
     updatedAt = DateTime.now();
   }
 
+  void setCompleted(bool value) {
+    completed = value;
+    updatedAt = DateTime.now();
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -34,18 +39,23 @@ class ShoppingListModel {
       'items': items.map((item) => item.toJson()).toList(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'completed': completed,
     };
   }
 
   static ShoppingListModel fromJson(Map<String, dynamic> json) {
     return ShoppingListModel(
-      name: json['name'],
-      items: (json['items'] as List)
-          .map((item) => ShoppingListItemModel.fromJson(item as Map<String, dynamic>))
-          .toList(),
-    )
+        name: json['name'],
+        items: (json['items'] as List)
+            .map(
+              (item) =>
+                  ShoppingListItemModel.fromJson(item as Map<String, dynamic>),
+            )
+            .toList(),
+      )
       ..id = json['id']
       ..createdAt = DateTime.parse(json['createdAt'])
-      ..updatedAt = DateTime.parse(json['updatedAt']);
+      ..updatedAt = DateTime.parse(json['updatedAt'])
+      ..completed = json['completed'] ?? false;
   }
 }

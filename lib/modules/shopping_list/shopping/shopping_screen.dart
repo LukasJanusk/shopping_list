@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/components/layout/app_scaffold.dart';
+import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/ui/divider_with_title.dart';
+import 'package:shopping_list/modules/shopping_list/shopping/components/shopping_list_check_item.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/storage_manager.dart';
@@ -13,9 +17,10 @@ class ShoppingScreen extends StatefulWidget {
 
 class _ShoppingScreenState extends State<ShoppingScreen> {
   static const _rowAnimationDuration = Duration(milliseconds: 240);
+  static const _checkmarkAnimationDuration = Duration(milliseconds: 280);
   static const _sectionResizeDuration = Duration(milliseconds: 220);
-  static const _estimatedItemExtent = 72.0;
-  static const _sectionChromeExtent = 76.0;
+  static const _estimatedItemExtent = 82.0;
+  static const _sectionChromeExtent = 90.0;
   static const _minimumVisibleSectionHeight = _sectionChromeExtent;
   static const _minimumSectionHeight =
       _sectionChromeExtent + (_estimatedItemExtent * 2);
@@ -25,6 +30,7 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   final _uncheckedListKey = GlobalKey<AnimatedListState>();
   final List<ShoppingListItemModel> _checkedItems = [];
   final List<ShoppingListItemModel> _uncheckedItems = [];
+  final Map<String, bool> _pendingCheckedStates = {};
   bool _didInitializePresentationLists = false;
 
   @override
@@ -50,6 +56,17 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   Future<void> _toggleItemChecked(ShoppingListItemModel item) async {
     final list = _list;
     if (list == null) return;
+    if (_pendingCheckedStates.containsKey(item.id)) return;
+
+    final targetCheckedState = !item.isChecked;
+
+    setState(() {
+      _pendingCheckedStates[item.id] = targetCheckedState;
+    });
+
+    await Future<void>.delayed(_checkmarkAnimationDuration);
+
+    if (!mounted) return;
 
     final sourceChecked = item.isChecked;
     final movesToChecked = !item.isChecked;
@@ -59,7 +76,12 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     final targetListKey = movesToChecked ? _checkedListKey : _uncheckedListKey;
     final sourceIndex = sourceItems.indexWhere((entry) => entry.id == item.id);
 
-    if (sourceIndex == -1) return;
+    if (sourceIndex == -1) {
+      setState(() {
+        _pendingCheckedStates.remove(item.id);
+      });
+      return;
+    }
 
     final sourceAnimatedIndex = _animatedIndexForLogicalIndex(
       sourceIndex,
@@ -96,9 +118,16 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
       ..addAll(_checkedItems)
       ..addAll(_uncheckedItems);
 
-    setState(() {});
+    if (!mounted) return;
+    setState(() {
+      _pendingCheckedStates.remove(item.id);
+    });
 
     await StorageManager.saveShoppingList(list);
+
+    if (list.items.every((item) => item.isChecked)) {
+      showFinishShoppingModal();
+    }
   }
 
   int _animatedIndexForLogicalIndex(int logicalIndex, int itemCount) {
@@ -106,14 +135,15 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   }
 
   Widget _buildItemTile(ShoppingListItemModel item) {
-    return Card(
-      child: CheckboxListTile(
-        value: item.isChecked,
-        onChanged: (_) => _toggleItemChecked(item),
-        title: Text(item.name),
-        subtitle: Text('Quantity: ${item.quantity}'),
-        controlAffinity: ListTileControlAffinity.leading,
-      ),
+    final visualChecked = _pendingCheckedStates[item.id] ?? item.isChecked;
+    final isAnimatingCheckmark = _pendingCheckedStates.containsKey(item.id);
+
+    return ShoppingListCheckItem(
+      item: item,
+      visualChecked: visualChecked,
+      isAnimatingCheckmark: isAnimatingCheckmark,
+      onTap: () => _toggleItemChecked(item),
+      checkmarkAnimationDuration: _checkmarkAnimationDuration,
     );
   }
 
@@ -134,11 +164,11 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
         axisAlignment: checked ? -1 : 1,
         child: SlideTransition(
           position: Tween<Offset>(
-            begin: Offset(0, checked ? -0.08 : 0.08),
+            begin: Offset(0, checked ? -0.16 : 0.16),
             end: Offset.zero,
           ).animate(curvedAnimation),
           child: Padding(
-            padding: EdgeInsets.only(bottom: checked ? 4 : 8),
+            padding: EdgeInsets.only(bottom: 8),
             child: _buildItemTile(item),
           ),
         ),
@@ -210,17 +240,39 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     return estimatedHeight;
   }
 
+  void showFinishShoppingModal() async {
+    await showAppPopupDialog<void>(
+      context: context,
+      title: 'Finish shopping?',
+      message:
+          'Mark this shopping trip as completed? You can still review it later in history.',
+      confirmLabel: 'Finish',
+      variant: AppPopupDialogVariant.success,
+      icon: Icons.check_circle_outline_rounded,
+      onConfirm: finishShopping,
+    );
+  }
+
+  void finishShopping() {
+    final list = _list;
+    if (list == null) return;
+
+    list.setCompleted(true);
+    StorageManager.saveShoppingList(list);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_list == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Shopping')),
+      return AppScaffold(
+        appBar: const AppTopBar(title: Text('Shopping')),
         body: const Center(child: Text('No shopping list selected.')),
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text(_list!.name)),
+    return AppScaffold(
+      appBar: AppTopBar(title: Text(_list!.name)),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final maxHeight = constraints.maxHeight;

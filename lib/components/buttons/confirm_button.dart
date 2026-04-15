@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/theme/app_decorations.dart';
+import 'package:shopping_list/theme/color_theme.dart';
 
 enum ConfirmButtonVariant { success, error, alert }
 
@@ -16,25 +18,34 @@ class ConfirmButton extends StatefulWidget {
     this.variant = ConfirmButtonVariant.error,
   });
 
-  Null get variantColors => null;
-  Null get accentColors => null;
-
   @override
   State<ConfirmButton> createState() => _ConfirmButtonState();
 }
 
 class _ConfirmButtonState extends State<ConfirmButton> {
   bool _confirming = false;
-  final variantColors = {
-    ConfirmButtonVariant.success: Colors.green,
-    ConfirmButtonVariant.error: Colors.red,
-    ConfirmButtonVariant.alert: Colors.orange,
-  };
-  final accentColors = {
-    ConfirmButtonVariant.success: Colors.green[200]!,
-    ConfirmButtonVariant.error: Colors.red[200]!,
-    ConfirmButtonVariant.alert: Colors.orange[200]!,
-  };
+
+  Color _variantColor(ConfirmButtonVariant variant) {
+    switch (variant) {
+      case ConfirmButtonVariant.success:
+        return AppColors.teal;
+      case ConfirmButtonVariant.error:
+        return AppColors.error;
+      case ConfirmButtonVariant.alert:
+        return AppColors.warning;
+    }
+  }
+
+  Color _variantAccent(ConfirmButtonVariant variant) {
+    switch (variant) {
+      case ConfirmButtonVariant.success:
+        return AppColors.tealPressed;
+      case ConfirmButtonVariant.error:
+        return AppColors.error.withAlpha(28);
+      case ConfirmButtonVariant.alert:
+        return AppColors.gold.withAlpha(44);
+    }
+  }
 
   void _handleTap() {
     if (_confirming) {
@@ -47,11 +58,15 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
   @override
   Widget build(BuildContext context) {
+    final variantColor = _variantColor(widget.variant);
+    final variantAccent = _variantAccent(widget.variant);
+
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _confirming
-            ? variantColors[widget.variant]
-            : accentColors[widget.variant],
+      style: AppDecorations.actionButtonStyle(
+        backgroundColor: _confirming ? variantColor : variantAccent,
+        foregroundColor: _confirming ? Colors.white : variantColor,
+        borderColor: _confirming ? null : variantColor.withAlpha(48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       ),
       onPressed: _handleTap,
       child: AnimatedSwitcher(

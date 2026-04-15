@@ -17,14 +17,14 @@
 
 ## UI / UX
 
-- [ ] Select list for shopping screen
-- [ ] Shopping mode screen
+- [x] Select list for shopping screen
+- [x] Shopping mode screen
 - [ ] Onboarding / first-time indicators
-- [ ] Select design for app
+- [x] Select design for app
 
 ## Design & Assets
 
-- [ ] Generate assets
+- [x] Generate assets
 - [ ] Generate assets for production
 - [ ] Update widgets for selected design
 

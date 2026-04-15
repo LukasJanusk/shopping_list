@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
+import 'package:shopping_list/theme/color_theme.dart';
 
 class ShoppingListBottomSheet extends StatefulWidget {
   const ShoppingListBottomSheet({super.key, required this.onItemAdded});
@@ -52,125 +54,159 @@ class _ShoppingListBottomSheetState extends State<ShoppingListBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
+    final theme = Theme.of(context);
 
-    return SafeArea(
-      top: false,
-      child: AnimatedPadding(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        padding: EdgeInsets.only(bottom: keyboardInset),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+    return AppBottomSheet(
+      title: 'Add item to list',
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Item Name',
+                hintText: 'Enter item name',
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter an item name';
+                }
+                return null;
+              },
+              textInputAction: TextInputAction.next,
+              autofocus: true,
+            ),
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.canvas,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: AppColors.ink.withValues(alpha: 0.08),
+                ),
+              ),
+              child: Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Add item to list',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Item Name',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter item name',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter an item name';
-                      }
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    autofocus: true,
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Text(
-                        'Quantity',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      IconButton(
-                        onPressed: _decrementQuantity,
-                        icon: Icon(Icons.remove),
-                        color: _quantity > 1
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey,
-                      ),
-                      Container(
-                        width: 70,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$_quantity',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quantity',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: AppColors.ink,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: _incrementQuantity,
-                        icon: Icon(Icons.add),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _addItem,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: _isLoading
-                          ? SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
-                                ),
-                              ),
-                            )
-                          : Text('Add Item'),
+                      ],
                     ),
+                  ),
+                  const SizedBox(width: 12),
+                  _QuantityButton(
+                    icon: Icons.remove_rounded,
+                    onTap: _quantity > 1 ? _decrementQuantity : null,
+                  ),
+                  Container(
+                    width: 58,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: AppColors.ink.withValues(alpha: 0.08),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$_quantity',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: AppColors.ink,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                  _QuantityButton(
+                    icon: Icons.add_rounded,
+                    onTap: _incrementQuantity,
+                    backgroundColor: AppColors.teal,
+                    iconColor: Colors.white,
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _addItem,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.surface,
+                          ),
+                        ),
+                      )
+                    : const Text('Add Item'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuantityButton extends StatelessWidget {
+  const _QuantityButton({
+    required this.icon,
+    required this.onTap,
+    this.backgroundColor = AppColors.surface,
+    this.iconColor = AppColors.ink,
+  });
+
+  final IconData icon;
+  final VoidCallback? onTap;
+  final Color backgroundColor;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final isEnabled = onTap != null;
+
+    return Material(
+      color: isEnabled
+          ? backgroundColor
+          : AppColors.ink.withValues(alpha: 0.06),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: AppColors.ink.withValues(alpha: 0.08)),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: SizedBox(
+          width: 42,
+          height: 42,
+          child: Icon(
+            icon,
+            color: isEnabled
+                ? iconColor
+                : AppColors.ink.withValues(alpha: 0.35),
+            size: 20,
           ),
         ),
       ),
