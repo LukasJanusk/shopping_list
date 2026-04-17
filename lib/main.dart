@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shopping_list/core/settings.dart';
 import 'package:shopping_list/core/storage_manager.dart';
@@ -16,6 +17,10 @@ import 'modules/shopping_list/create_list/shopping_list_info_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await StorageManager.init();
   final settings = Settings();
   await settings.initialize();
