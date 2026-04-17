@@ -21,6 +21,8 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
   static const _checkmarkAnimationDuration = Duration(milliseconds: 280);
   static const _sectionResizeDuration = Duration(milliseconds: 220);
   static const _estimatedItemExtent = 82.0;
+  static const _sectionHeaderExtent = 40.0;
+  static const _minimumSectionBodyExtent = 24.0;
   static const _sectionChromeExtent = 90.0;
   static const _minimumVisibleSectionHeight = _sectionChromeExtent;
   static const _minimumSectionHeight =
@@ -183,51 +185,58 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
     required bool checked,
   }) {
     final l10n = context.l10n;
+    final sectionBody = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 180),
+      child: items.isEmpty
+          ? ListView(
+              key: ValueKey('empty-$checked'),
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                Center(
+                  child: Text(
+                    checked ? l10n.noCheckedItemsYet : l10n.noUncheckedItems,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+              ],
+            )
+          : AnimatedList(
+              key: checked ? _checkedListKey : _uncheckedListKey,
+              initialItemCount: items.length,
+              reverse: true,
+              itemBuilder: (context, index, animation) {
+                final logicalIndex = _animatedIndexForLogicalIndex(
+                  index,
+                  items.length,
+                );
+                final item = items[logicalIndex];
+                return _buildAnimatedItem(
+                  item: item,
+                  animation: animation,
+                  checked: checked,
+                );
+              },
+            ),
+    );
 
     return Padding(
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...[DividerWithTitle(title: title), const SizedBox(height: 12)],
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 180),
-              child: items.isEmpty
-                  ? ListView(
-                      key: ValueKey('empty-$checked'),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: [
-                        Center(
-                          child: Text(
-                            checked
-                                ? l10n.noCheckedItemsYet
-                                : l10n.noUncheckedItems,
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                        ),
-                      ],
-                    )
-                  : AnimatedList(
-                      key: checked ? _checkedListKey : _uncheckedListKey,
-                      initialItemCount: items.length,
-                      reverse: true,
-                      itemBuilder: (context, index, animation) {
-                        final logicalIndex = _animatedIndexForLogicalIndex(
-                          index,
-                          items.length,
-                        );
-                        final item = items[logicalIndex];
-                        return _buildAnimatedItem(
-                          item: item,
-                          animation: animation,
-                          checked: checked,
-                        );
-                      },
-                    ),
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final bodyHeight = constraints.maxHeight - _sectionHeaderExtent;
+          final visibleBodyHeight = bodyHeight > 0 ? bodyHeight : 0.0;
+          final showBody = visibleBodyHeight > _minimumSectionBodyExtent;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DividerWithTitle(title: title),
+              const SizedBox(height: 12),
+              if (showBody)
+                SizedBox(height: visibleBodyHeight, child: sectionBody),
+            ],
+          );
+        },
       ),
     );
   }

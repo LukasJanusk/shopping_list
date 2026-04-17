@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          l10n.createNewList,
+                          l10n.myLists,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,

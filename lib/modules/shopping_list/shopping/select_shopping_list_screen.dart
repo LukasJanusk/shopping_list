@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
+import 'package:shopping_list/components/ui/empty_state.dart';
 import 'package:shopping_list/l10n/l10n.dart';
 import 'package:shopping_list/modules/shopping_list/components/shopping_list_card.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_manager.dart';
@@ -76,36 +76,29 @@ class _SelectShoppingListScreenState extends State<SelectShoppingListScreen>
           if (shoppingLists.isEmpty) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  MediaQuery.of(context).padding.bottom + 16,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(AppAssets.emptyLists, height: 200),
-                    const SizedBox(height: 24),
-                    Text(
-                      l10n.noShoppingListsYet,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.ink,
-                          ),
+                    Spacer(),
+                    EmptyState(
+                      asset: AppAssets.emptyLists,
+                      title: l10n.noShoppingLists,
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      l10n.emptyListsDescription,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.inkSoft,
-                        height: 1.4,
-                      ),
-                    ),
+
                     const SizedBox(height: 20),
+                    Spacer(),
                     ElevatedButton.icon(
                       onPressed: navigateToCreateList,
                       icon: const Icon(Icons.playlist_add_rounded),
-                      label: Text(l10n.createYourFirstList),
+                      label: Text(l10n.createList),
                     ),
                   ],
                 ),

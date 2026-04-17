@@ -13,6 +13,7 @@
   "tapToStart": "Tap to start",
   "shoppingLists": "Shopping Lists",
   "noShoppingListsYet": "No shopping lists yet",
+  "noShoppingLists": "No shopping lists",
   "emptyListsDescription": "Start with a fresh list and keep everything you need in one place.",
   "tapCreateFirstList": "Tap + to create your first list!",
   "selectShoppingList": "Select Shopping List",
@@ -23,6 +24,13 @@
   "@deleteItemMessage": {
     "placeholders": {
       "itemName": {}
+    }
+  },
+  "deleteListTitle": "Delete list?",
+  "deleteListMessage": "Remove \"{listName}\" and all of its items? This action cannot be undone.",
+  "@deleteListMessage": {
+    "placeholders": {
+      "listName": {}
     }
   },
   "delete": "Delete",
@@ -43,6 +51,7 @@
   "fieldCannotBeEmpty": "Field cannot be empty",
   "createListTitle": "Create New List",
   "listName": "List Name",
+  "myLists": "My lists",
   "enterListName": "Enter list name",
   "pleaseEnterListName": "Please enter a list name",
   "createList": "Create List",

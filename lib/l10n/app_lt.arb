@@ -13,6 +13,7 @@
   "tapToStart": "Palieskite, kad pradėtumėte",
   "shoppingLists": "Pirkinių sąrašai",
   "noShoppingListsYet": "Dar nėra pirkinių sąrašų",
+  "noShoppingLists": "Pirkinių sąrašų nėra",
   "emptyListsDescription": "Pradėkite nuo naujo sąrašo ir laikykite viską, ko reikia, vienoje vietoje.",
   "tapCreateFirstList": "Spauskite +, kad sukurtumėte pirmą sąrašą!",
   "selectShoppingList": "Pasirinkite sąrašą",
@@ -23,6 +24,13 @@
   "@deleteItemMessage": {
     "placeholders": {
       "itemName": {}
+    }
+  },
+  "deleteListTitle": "Ištrinti sąrašą?",
+  "deleteListMessage": "Pašalinti \"{listName}\" ir visas jo prekes? Šio veiksmo atšaukti negalėsite.",
+  "@deleteListMessage": {
+    "placeholders": {
+      "listName": {}
     }
   },
   "delete": "Ištrinti",
@@ -42,6 +50,7 @@
   "update": "Atnaujinti",
   "fieldCannotBeEmpty": "Laukelis negali būti tuščias",
   "createListTitle": "Sukurti naują sąrašą",
+  "myLists": "Mano sąrašai",
   "listName": "Sąrašo pavadinimas",
   "enterListName": "Įveskite sąrašo pavadinimą",
   "pleaseEnterListName": "Įveskite sąrašo pavadinimą",

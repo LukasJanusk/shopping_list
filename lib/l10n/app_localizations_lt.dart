@@ -49,6 +49,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get noShoppingListsYet => 'Dar nėra pirkinių sąrašų';
 
   @override
+  String get noShoppingLists => 'Pirkinių sąrašų nėra';
+
+  @override
   String get emptyListsDescription =>
       'Pradėkite nuo naujo sąrašo ir laikykite viską, ko reikia, vienoje vietoje.';
 
@@ -70,6 +73,14 @@ class AppLocalizationsLt extends AppLocalizations {
   @override
   String deleteItemMessage(Object itemName) {
     return 'Pašalinti \"$itemName\" iš šio pirkinių sąrašo? Šio veiksmo atšaukti negalėsite.';
+  }
+
+  @override
+  String get deleteListTitle => 'Ištrinti sąrašą?';
+
+  @override
+  String deleteListMessage(Object listName) {
+    return 'Pašalinti \"$listName\" ir visas jo prekes? Šio veiksmo atšaukti negalėsite.';
   }
 
   @override
@@ -126,6 +137,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get listName => 'Sąrašo pavadinimas';
+
+  @override
+  String get myLists => 'Mano sąrašai';
 
   @override
   String get enterListName => 'Įveskite sąrašo pavadinimą';

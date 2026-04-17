@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/components/buttons/confirm_button.dart';
 import 'package:shopping_list/components/layout/app_scaffold.dart';
 import 'package:shopping_list/components/layout/app_top_bar.dart';
 import 'package:shopping_list/components/modals/app_bottom_sheet.dart';
 import 'package:shopping_list/components/modals/app_popup_dialog.dart';
 import 'package:shopping_list/components/modals/bottom_title_edit_modal.dart';
-import 'package:shopping_list/components/ui/empty_state.dart';
 import 'package:shopping_list/components/ui/floating_pointer_with_text.dart';
 import 'package:shopping_list/core/storage_manager.dart';
 import 'package:shopping_list/l10n/l10n.dart';
@@ -13,7 +11,6 @@ import 'package:shopping_list/modules/shopping_list/create_list/components/shopp
 import 'package:shopping_list/modules/shopping_list/create_list/components/shopping_list_item_editible.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_item_model.dart';
 import 'package:shopping_list/modules/shopping_list/models/shopping_list_model.dart';
-import 'package:shopping_list/theme/app_assets.dart';
 import 'package:shopping_list/theme/app_decorations.dart';
 import 'package:shopping_list/theme/color_theme.dart';
 
@@ -116,6 +113,21 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     Navigator.pop(context, true);
   }
 
+  void _confirmListDelete() {
+    final l10n = context.l10n;
+    final listName = _list?.name ?? l10n.newListDefaultName;
+
+    showAppPopupDialog<void>(
+      context: context,
+      title: l10n.deleteListTitle,
+      message: l10n.deleteListMessage(listName),
+      confirmLabel: l10n.delete,
+      variant: AppPopupDialogVariant.danger,
+      icon: Icons.delete_outline_rounded,
+      onConfirm: _onListDelete,
+    );
+  }
+
   void _updateListTitle(String newTitle) {
     setState(() {
       if (_list != null) _list!.name = newTitle;
@@ -142,20 +154,17 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
   Widget _buildDeleteButton() {
     final l10n = context.l10n;
 
-    return ConfirmButton(
-      onConfirmed: _onListDelete,
-      initialWidget: Text(
-        l10n.deleteList,
-        style: TextStyle(fontSize: 18, color: Colors.red[700]),
+    return ElevatedButton(
+      onPressed: _confirmListDelete,
+      style: AppDecorations.actionButtonStyle(
+        backgroundColor: Colors.red.withAlpha(18),
+        foregroundColor: Colors.red.shade700,
+        borderColor: Colors.red.withAlpha(48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       ),
-      confirmWidget: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            l10n.confirmDelete,
-            style: const TextStyle(fontSize: 18, color: Colors.white),
-          ),
-        ],
+      child: Text(
+        l10n.deleteList,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -173,7 +182,7 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
       ),
       child: Text(
         l10n.save,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -182,10 +191,10 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.bottomLeft,
         child: SafeArea(
           child: Row(
-            spacing: 16,
+            spacing: 12,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [_buildDeleteButton(), if (showSave) _buildSaveButton()],
@@ -216,22 +225,40 @@ class _ShoppingListInfoScreenState extends State<ShoppingListInfoScreen>
       body: Builder(
         builder: (context) {
           if (list.items.isEmpty) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Spacer(),
-                EmptyState(
-                  asset: AppAssets.emptyLists,
-                  title: l10n.yourListIsEmpty,
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 56.0),
-                  child: FloatingTextWithPointer(text: l10n.tapAddItemsToList),
-                ),
-                _buildBottomActions(showSave: false),
-              ],
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                const bottomContentPadding = 140.0;
+
+                return Stack(
+                  children: [
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(
+                        24,
+                        24,
+                        24,
+                        bottomContentPadding,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight:
+                              constraints.maxHeight - bottomContentPadding,
+                        ),
+                        child: Center(
+                          child: Text(
+                            l10n.yourListIsEmpty,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    FloatingTextWithPointer(text: l10n.tapAddItemsToList),
+                    _buildBottomActions(showSave: false),
+                  ],
+                );
+              },
             );
           }
           return CustomScrollView(

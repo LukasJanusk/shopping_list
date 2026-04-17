@@ -49,6 +49,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noShoppingListsYet => 'No shopping lists yet';
 
   @override
+  String get noShoppingLists => 'No shopping lists';
+
+  @override
   String get emptyListsDescription =>
       'Start with a fresh list and keep everything you need in one place.';
 
@@ -70,6 +73,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String deleteItemMessage(Object itemName) {
     return 'Remove \"$itemName\" from this shopping list? This action cannot be undone.';
+  }
+
+  @override
+  String get deleteListTitle => 'Delete list?';
+
+  @override
+  String deleteListMessage(Object listName) {
+    return 'Remove \"$listName\" and all of its items? This action cannot be undone.';
   }
 
   @override
@@ -125,6 +136,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listName => 'List Name';
+
+  @override
+  String get myLists => 'My lists';
 
   @override
   String get enterListName => 'Enter list name';

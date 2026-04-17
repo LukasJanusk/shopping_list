@@ -5,7 +5,7 @@ class FloatingTextWithPointer extends StatefulWidget {
   const FloatingTextWithPointer({
     super.key,
     required this.text,
-    this.right = 56,
+    this.right = 16,
     this.bottom = 112,
     this.duration = const Duration(milliseconds: 1000),
   });
@@ -78,11 +78,7 @@ class _FloatingTextWithPointerState extends State<FloatingTextWithPointer>
               opacity: _arrowOpacity,
               child: Transform.translate(
                 offset: const Offset(-4, 6),
-                child: Icon(
-                  Icons.south_east_rounded,
-                  size: 50,
-                  color: AppColors.coral,
-                ),
+                child: Icon(Icons.south, size: 50, color: AppColors.coral),
               ),
             ),
           ],

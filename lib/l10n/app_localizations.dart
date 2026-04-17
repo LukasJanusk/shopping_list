@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'No shopping lists yet'**
   String get noShoppingListsYet;
 
+  /// No description provided for @noShoppingLists.
+  ///
+  /// In en, this message translates to:
+  /// **'No shopping lists'**
+  String get noShoppingLists;
+
   /// No description provided for @emptyListsDescription.
   ///
   /// In en, this message translates to:
@@ -217,6 +223,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove \"{itemName}\" from this shopping list? This action cannot be undone.'**
   String deleteItemMessage(Object itemName);
+
+  /// No description provided for @deleteListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete list?'**
+  String get deleteListTitle;
+
+  /// No description provided for @deleteListMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove \"{listName}\" and all of its items? This action cannot be undone.'**
+  String deleteListMessage(Object listName);
 
   /// No description provided for @delete.
   ///
@@ -325,6 +343,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'List Name'**
   String get listName;
+
+  /// No description provided for @myLists.
+  ///
+  /// In en, this message translates to:
+  /// **'My lists'**
+  String get myLists;
 
   /// No description provided for @enterListName.
   ///
