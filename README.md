@@ -1,5 +1,10 @@
 # Shopping List App
 
+<p align="center">
+	<img src="screenshots/1000011797.jpg" alt="Shopping List app screenshot 1" width="240" />
+	<img src="screenshots/1000011801.jpg" alt="Shopping List app screenshot 2" width="240" />
+</p>
+
 A Flutter shopping list app focused on quick list creation, clean shopping flow, and a polished mobile-first UI. The project currently supports local persistence, a themed interface, splash screen flow, and English/Lithuanian localization.
 
 ## Features
@@ -72,10 +77,6 @@ flutter gen-l10n
 - Shopping lists are stored locally using `SharedPreferences`
 - App-wide settings such as preferred locale are also stored locally
 - Storage logic lives in `lib/core/storage_manager.dart`
-
-## Screenshots
-
-Screenshots and UI previews can be added here later.
 
 ## Roadmap
 
