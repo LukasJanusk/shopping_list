@@ -70,6 +70,14 @@
   "finish": "Finish",
   "shoppingHistory": "Shopping History",
   "shoppingHistoryPlaceholder": "Shopping history will appear here.",
+  "purchasedItems": "Purchased items",
+  "noPurchasedItems": "No purchased items in this list.",
+  "completedOn": "Completed on {date}",
+  "@completedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "settingsPlaceholder": "Settings will appear here.",
   "statisticsPlaceholder": "Statistics will appear here.",
   "cancel": "Cancel",

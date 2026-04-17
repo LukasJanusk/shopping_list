@@ -70,6 +70,14 @@
   "finish": "Baigti",
   "shoppingHistory": "Apsipirkimų istorija",
   "shoppingHistoryPlaceholder": "Apsipirkimų istorija bus rodoma čia.",
+  "purchasedItems": "Nupirktos prekės",
+  "noPurchasedItems": "Šiame sąraše nėra nupirktų prekių.",
+  "completedOn": "Užbaigta {date}",
+  "@completedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "settingsPlaceholder": "Nustatymai bus rodomi čia.",
   "statisticsPlaceholder": "Statistika bus rodoma čia.",
   "cancel": "Atšaukti",

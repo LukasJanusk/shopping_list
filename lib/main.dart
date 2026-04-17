@@ -6,6 +6,7 @@ import 'package:shopping_list/core/storage_manager.dart';
 import 'package:shopping_list/l10n/app_localizations.dart';
 import 'package:shopping_list/modules/home/home_screen.dart';
 import 'package:shopping_list/modules/history/history_screen.dart';
+import 'package:shopping_list/modules/history/history_info_screen.dart';
 import 'package:shopping_list/modules/settings/settings_screen.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/select_shopping_list_screen.dart';
 import 'package:shopping_list/modules/shopping_list/shopping/shopping_screen.dart';
@@ -77,6 +78,7 @@ class _MainAppState extends State<MainApp> {
         '/shopping-list-info': (context) => const ShoppingListInfoScreen(),
         '/shopping': (context) => const ShoppingScreen(),
         '/history': (context) => const HistoryScreen(),
+        '/history-info': (context) => const HistoryInfoScreen(),
         '/statistics': (context) => const StatisticsScreen(),
         '/settings': (context) => SettingsScreen(settings: widget.settings),
       },

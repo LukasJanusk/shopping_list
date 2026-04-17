@@ -82,10 +82,10 @@ Screenshots and UI previews can be added here later.
 ### Product
 
 - [ ] Onboarding / first-time indicators
-- [ ] Decide on app rotation constraints
+- [x] Decide on app rotation constraints
 - [ ] Generate production-ready assets
 - [ ] Shopping timer
-- [ ] Shopping history improvements
+- [x] Shopping history improvements
 - [ ] Shopping item categories
 - [ ] Item pricing and total spend
 - [ ] Statistics screen improvements

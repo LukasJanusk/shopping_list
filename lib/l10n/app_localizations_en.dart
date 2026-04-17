@@ -196,6 +196,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shoppingHistoryPlaceholder => 'Shopping history will appear here.';
 
   @override
+  String get purchasedItems => 'Purchased items';
+
+  @override
+  String get noPurchasedItems => 'No purchased items in this list.';
+
+  @override
+  String completedOn(Object date) {
+    return 'Completed on $date';
+  }
+
+  @override
   String get settingsPlaceholder => 'Settings will appear here.';
 
   @override

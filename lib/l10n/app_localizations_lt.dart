@@ -198,6 +198,17 @@ class AppLocalizationsLt extends AppLocalizations {
       'Apsipirkimų istorija bus rodoma čia.';
 
   @override
+  String get purchasedItems => 'Nupirktos prekės';
+
+  @override
+  String get noPurchasedItems => 'Šiame sąraše nėra nupirktų prekių.';
+
+  @override
+  String completedOn(Object date) {
+    return 'Užbaigta $date';
+  }
+
+  @override
   String get settingsPlaceholder => 'Nustatymai bus rodomi čia.';
 
   @override

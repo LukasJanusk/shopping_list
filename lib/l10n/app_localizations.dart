@@ -458,6 +458,24 @@ abstract class AppLocalizations {
   /// **'Shopping history will appear here.'**
   String get shoppingHistoryPlaceholder;
 
+  /// No description provided for @purchasedItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchased items'**
+  String get purchasedItems;
+
+  /// No description provided for @noPurchasedItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No purchased items in this list.'**
+  String get noPurchasedItems;
+
+  /// No description provided for @completedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed on {date}'**
+  String completedOn(Object date);
+
   /// No description provided for @settingsPlaceholder.
   ///
   /// In en, this message translates to:
