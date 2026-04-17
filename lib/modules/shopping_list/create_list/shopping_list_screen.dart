@@ -140,6 +140,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               final list = shoppingLists[index];
               return ShoppingListCard(
                 list: list,
+                editable: true,
                 variant: list.completed
                     ? ShoppingListCardVariant.primary
                     : ShoppingListCardVariant.secondary,

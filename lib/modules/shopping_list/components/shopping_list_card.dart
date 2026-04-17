@@ -14,11 +14,13 @@ class ShoppingListCard extends StatelessWidget {
     required this.list,
     required this.onTap,
     this.variant = ShoppingListCardVariant.surface,
+    this.editable = false,
   });
 
   final ShoppingListModel list;
   final FutureOr<void> Function() onTap;
   final ShoppingListCardVariant variant;
+  final bool editable;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +127,9 @@ class ShoppingListCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Icon(
-                        Icons.arrow_forward_rounded,
+                        editable
+                            ? Icons.edit_rounded
+                            : Icons.arrow_forward_rounded,
                         size: 20,
                         color: arrowColor,
                       ),
